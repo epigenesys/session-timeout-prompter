@@ -1,5 +1,7 @@
 # Session Timeout Prompter
 
+UNDER CONSTRUCTION
+
 Prompt the user when their session is about to timeout and allow them to extend it.
 
 ## Installation

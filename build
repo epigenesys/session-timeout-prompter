@@ -1,0 +1,48 @@
+#! /usr/bin/env ruby
+require 'babel/transpiler'
+require 'rake'
+require 'optparse'
+
+# A simple script to transpile our source ES6 in src/javascripts to standard ES5
+# javascript in app/assets/javascripts/session_timeout_prompter.js
+
+TARGET_JS_PATH = "#{File.dirname(__FILE__)}/app/assets/javascripts/session_timeout_prompter.js"
+SRC_DIRECTORY  = "#{File.dirname(__FILE__)}/src/javascripts"
+
+es6_files_to_transpile = Dir.glob("#{SRC_DIRECTORY}/**/*.es6")
+
+File.open TARGET_JS_PATH, 'w' do |output_file|
+
+  es6_files_to_transpile.each do |es6_file_path|
+    puts "Transpiling #{es6_file_path}..."
+    transpiled_es6 = Babel::Transpiler.transform File.read(es6_file_path)
+    output_file.puts transpiled_es6['code']
+  end
+
+end
+
+options = {}
+OptionParser.new do |opts|
+
+  opts.banner = "Usage: build [options]"
+  opts.on("-j", "--jasmine", "Run Jasmine tests only") do |v|
+    options[:jasmine_only] = v
+  end
+
+  opts.on("-r", "--rspec", "Run RSpec tests only") do |v|
+    options[:rspec_only] = v
+  end
+
+end.parse!
+
+unless options[:jasmine_only]
+  puts "Running RSpec..."
+end
+
+unless options[:rspec_only]
+  puts "Running Jasmine..."
+  app = Rake.application
+  app.init
+  app.load_rakefile
+  app['jasmine:ci'].invoke
+end

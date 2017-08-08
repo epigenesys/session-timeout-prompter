@@ -1,0 +1,136 @@
+(function($) {
+  // Prompt when 5 minutes remaining before timeout
+  const LATENCY_ADJUSTMENT = 5;
+  const PROMPT_WHEN_X_SECONDS_LEFT = 300 + LATENCY_ADJUSTMENT;
+
+  class SessionTimeoutChecker {
+    constructor(element) {
+      this.tick = this.tick.bind(this);
+      this.sessionKey = element.data('session-key');
+
+      this.sessionTimeoutInSeconds = parseInt(element.data('timeout-in'));
+      this.pingUrl                 = element.data('server-ping-path');
+
+      this.aboutToTimeoutPrompt    = $('#session-timeout-prompter-about-to-timeout');
+      this.timedOutPrompt          = $('#session-timeout-prompter-session-timed-out');
+
+      this.lastPinged              = this.currentTime();
+      this.promptingSessionTimeout = false;
+
+      this.setTimeoutAt();
+      this.addListeners();
+    }
+
+    start() {
+      this.tick();
+      return this.tickInterval = setInterval(this.tick, 1000);
+    }
+
+    stop() {
+      return clearInterval(this.tickInterval);
+    }
+
+    restart() {
+      this.stop();
+      this.setTimeoutAt();
+      return this.start();
+    }
+
+    tick() {
+      const timeLeftInSeconds = this.timeoutAt - this.currentTime();
+      if (timeLeftInSeconds <= 0) {
+        return this.showTimeoutPrompt();
+      } else if (timeLeftInSeconds <= PROMPT_WHEN_X_SECONDS_LEFT) {
+        return this.showAboutToTimeoutPrompt(timeLeftInSeconds);
+      }
+    }
+
+    currentTime() {
+      return Math.floor(new Date().getTime() / 1000);
+    }
+
+    setTimeoutAt() {
+      this.timeoutAt = this.currentTime() + this.sessionTimeoutInSeconds;
+      return localStorage.setItem(this.sessionKey, this.timeoutAt);
+    }
+
+    addListeners() {
+      this.aboutToTimeoutPrompt.on('click', '#session-timeout-prompter-remain-logged-in-btn', () => {
+        this.promptingSessionTimeout = false;
+        this.aboutToTimeoutPrompt.modal('hide');
+        this.stop();
+        return this.pingServerNow();
+      });
+
+      return $(window).on('storage', e => {
+        const event = e.originalEvent;
+        if (event.key === this.sessionKey) {
+          this.hideAllPrompts();
+          this.stop();
+          this.timeoutAt = event.newValue;
+          return this.start();
+        }
+      });
+    }
+
+    showAboutToTimeoutPrompt(timeLeftInSeconds) {
+      if (!this.promptingSessionTimeout) {
+        this.promptingSessionTimeout = true;
+        this.aboutToTimeoutPrompt.modal('show');
+      }
+
+      const minutesForDisplay = Math.floor(timeLeftInSeconds / 60);
+      const secondsForDisplay = Math.floor(timeLeftInSeconds - (minutesForDisplay * 60));
+
+      return $('#session-timeout-prompter-about-to-timeout-in', this.aboutToTimeoutPrompt).text(`${minutesForDisplay}m ${secondsForDisplay}s`);
+    }
+
+    showTimeoutPrompt() {
+      this.aboutToTimeoutPrompt.modal('hide');
+      this.timedOutPrompt.modal('show');
+      return this.stop();
+    }
+
+    hideAllPrompts() {
+      this.promptingSessionTimeout = false;
+      this.aboutToTimeoutPrompt.modal('hide');
+      return this.timedOutPrompt.modal('hide');
+    }
+
+    pingServerNow() {
+      $.post(this.pingUrl);
+      return this.lastPinged = this.currentTime();
+    }
+
+    pingServerWithInterval() {
+      if ((!this.promptingSessionTimeout) && ((this.currentTime() - this.lastPinged) > 10)) {
+        return this.pingServerNow();
+      }
+    }
+  }
+
+
+  $.fn.sessionTimoutChecker = function(action) {
+    return this.each(function() {
+      let timeoutChecker = $(this).data('session-timeout-checker');
+      if (timeoutChecker == null) {
+        $(this).data('session-timeout-checker', (timeoutChecker = new SessionTimeoutChecker($(this))));
+      }
+
+      return timeoutChecker[action]();
+    });
+  };
+
+  return $(function() {
+    if ($('#session-timeout-prompter-container').is('[data-timeout-in]')) {
+      $('#session-timeout-prompter-container').sessionTimoutChecker('start');
+      $(document).ajaxComplete(() => $('#session-timeout-prompter-container').sessionTimoutChecker('restart'));
+
+      const pingServer = () => $('#session-timeout-prompter-container').sessionTimoutChecker('pingServerWithInterval');
+
+      $(window).scroll(pingServer);
+      $(document).on('keydown click', pingServer);
+      return $(document).on('ajax-modal-show', () => $('#modalWindow').scroll(pingServer));
+    }});
+
+})(jQuery);

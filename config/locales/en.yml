@@ -1,0 +1,9 @@
+en:
+  session_timeout_prompter:
+    your_session_will_expire_in:     "Your session will expire and you will be automatically logged out in"
+    do_you_wish_to_remain_logged_in: "Do you wish to remain logged in?"
+    remain_logged_in_btn_title:      "Yes keep me logged in - I am still using the system"
+    remain_logged_in_btn_text:       "Yes"
+    session_timed_out:               "Your session has expired."
+    log_in_again_btn_title:          "Log in again"
+    log_in_again_btn_text:           "Log in again"

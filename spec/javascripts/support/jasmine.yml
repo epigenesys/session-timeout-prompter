@@ -11,6 +11,7 @@
 #   - 'dist/**/*.js'
 #
 src_files:
+  - spec/javascripts/vendor/jquery.min.js
   - app/assets/javascripts/**/*.js
 
 # stylesheets

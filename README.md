@@ -2,29 +2,31 @@
 
 UNDER CONSTRUCTION
 
-Prompt the user when their session is about to timeout and allow them to extend it.
+Rails Engine to prompt the user when their session is about to timeout and allow them to extend it.
 
 ## Installation
 
-Add this line to your application's Gemfile:
+Add the gem to your Gemfile:
 
 ```ruby
 gem 'session_timeout_prompter'
 ```
 
-And then execute:
+Require the js: `//= session_timeout_prompter`
 
-    $ bundle
+Require the css `*= require session_timeout_prompter`
 
-Or install it yourself as:
+Add `= session_timeout_prompter(timeout_in: User.timeout_in, scope: :user)` after the body tag in your layout. (Assuming you are using Devise and are using a scope/model called User).
 
-    $ gem install session_timeout_prompter
 
-Add the following to your js: `//= session_timeout_prompter`
+Configurables:
+
+Modify routes... TODO... due to the inherent inaccuracy of timing in Javascript it is advisable to go via logout to make sure they're actually logged out to avoid confusion.
 
 ## Usage
 
 TODO: Write usage instructions here
+
 
 ## Development
 
@@ -34,9 +36,9 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ### ES6!
 
-The Javascript is written in ES6 and transpiled with Babel. The ES6 should be modified in `src/javascripts` and then transpiled to `app/assets/javascripts/session_timeout_prompter`.
+The Javascript is written in ES6 and transpiled with Babel. The ES6 should be modified in `src/javascripts` and then transpiled to `app/assets/javascripts/session_timeout_prompter.js`.
 
-There is a hand script `./build` that will do the transpilation and run the tests.
+There is a handy script `./build` that will do the transpilation and run the tests.
 
 ### Testing
 

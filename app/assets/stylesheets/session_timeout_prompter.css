@@ -1,0 +1,7 @@
+.session-timeout-prompter-modal {
+  z-index: 1100
+}
+
+.session-timeout-prompter-modal .modal-body p:last-child {
+  margin-bottom: 0
+}

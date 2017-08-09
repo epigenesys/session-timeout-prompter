@@ -9,7 +9,7 @@ class ServerPinger {
   }
 
   pingServerWithThrottling(ms_to_throttle = 10) {
-    if(!this.lastPingedAt || (this.currentTime() - this.lastPingedAt) > ms_to_throttle) {
+    if(!this.lastPingedAt || (this.currentTimestamp() - this.lastPingedAt) > ms_to_throttle) {
       this.pingServerNow();
     }
   }
@@ -18,10 +18,10 @@ class ServerPinger {
   // Private
 
   setLastPingedAt() {
-    this.lastPingedAt = this.currentTime();
+    this.lastPingedAt = this.currentTimestamp();
   }
 
-  currentTime() {
+  currentTimestamp() {
     return Math.floor(new Date().getTime() / 1000);
   }
 }

@@ -9,49 +9,15 @@
       this.sessionKey = element.data('session-key');
 
       this.sessionTimeoutInSeconds = parseInt(element.data('timeout-in'));
-      this.pingUrl                 = element.data('server-ping-path');
+      this.serverPinger            = new ServerPinger(element.data('server-ping-path'));
 
       this.aboutToTimeoutPrompt    = $('#session-timeout-prompter-about-to-timeout');
       this.timedOutPrompt          = $('#session-timeout-prompter-session-timed-out');
 
-      this.lastPinged              = this.currentTime();
       this.promptingSessionTimeout = false;
 
       this.setTimeoutAt();
       this.addListeners();
-    }
-
-    start() {
-      this.tick();
-      return this.tickInterval = setInterval(this.tick, 1000);
-    }
-
-    stop() {
-      return clearInterval(this.tickInterval);
-    }
-
-    restart() {
-      this.stop();
-      this.setTimeoutAt();
-      return this.start();
-    }
-
-    tick() {
-      const timeLeftInSeconds = this.timeoutAt - this.currentTime();
-      if (timeLeftInSeconds <= 0) {
-        return this.showTimeoutPrompt();
-      } else if (timeLeftInSeconds <= PROMPT_WHEN_X_SECONDS_LEFT) {
-        return this.showAboutToTimeoutPrompt(timeLeftInSeconds);
-      }
-    }
-
-    currentTime() {
-      return Math.floor(new Date().getTime() / 1000);
-    }
-
-    setTimeoutAt() {
-      this.timeoutAt = this.currentTime() + this.sessionTimeoutInSeconds;
-      return localStorage.setItem(this.sessionKey, this.timeoutAt);
     }
 
     addListeners() {
@@ -98,13 +64,12 @@
     }
 
     pingServerNow() {
-      $.post(this.pingUrl);
-      return this.lastPinged = this.currentTime();
+      this.serverPinger.pingServerNow();
     }
 
-    pingServerWithInterval() {
-      if ((!this.promptingSessionTimeout) && ((this.currentTime() - this.lastPinged) > 10)) {
-        return this.pingServerNow();
+    pingServerWithThrottling() {
+      if (!this.promptingSessionTimeout) {
+        this.serverPinger.pingServerNow();
       }
     }
   }

@@ -23,7 +23,7 @@ describe("ServerPinger", function() {
     var pingServerNow;
     beforeEach(function(){
       pingServerNow = spyOn(serverPinger, 'pingServerNow')
-      spyOn(serverPinger, 'currentTime').and.returnValue(20);
+      spyOn(serverPinger, 'currentTimestamp').and.returnValue(20);
     });
 
     describe("when throttling at 10ms and there has never been a ping", function(){
@@ -60,7 +60,7 @@ describe("ServerPinger", function() {
 
   describe("setLastPingedAt()", function(){
     it("records that the server was pinged", function() {
-      spyOn(serverPinger, 'currentTime').and.returnValue("right now")
+      spyOn(serverPinger, 'currentTimestamp').and.returnValue("right now")
       expect(serverPinger.lastPingedAt).toBeUndefined();
       serverPinger.setLastPingedAt();
       expect(serverPinger.lastPingedAt).toEqual("right now");

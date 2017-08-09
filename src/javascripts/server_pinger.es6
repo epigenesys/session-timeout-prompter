@@ -5,7 +5,7 @@ class ServerPinger {
   }
 
   pingServerNow() {
-    $.post(this.pingPath, this.setLastPingedAt);
+    jQuery.post(this.pingPath, this.setLastPingedAt);
   }
 
   pingServerWithThrottling(ms_to_throttle = 10) {

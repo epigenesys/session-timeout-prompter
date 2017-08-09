@@ -15,7 +15,7 @@ var ServerPinger = (function () {
   _createClass(ServerPinger, [{
     key: "pingServerNow",
     value: function pingServerNow() {
-      $.post(this.pingPath, this.setLastPingedAt);
+      jQuery.post(this.pingPath, this.setLastPingedAt);
     }
   }, {
     key: "pingServerWithThrottling",

@@ -9,7 +9,7 @@ describe("ServerPinger", function() {
 
   describe("pingServerNow()", function() {
     it("pings the server immediately and records the time", function() {
-      var jqueryPost = spyOn($, 'post').and.callFake(function(){
+      var jqueryPost = spyOn(jQuery, 'post').and.callFake(function(){
         // pretend to do the ajax request
       });
       var setLastPingedAtCallback = spyOn(serverPinger, 'setLastPingedAt');

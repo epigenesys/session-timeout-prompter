@@ -7,36 +7,64 @@ describe("ServerPinger", function() {
     serverPinger = new ServerPinger(pingPath);
   });
 
-  describe("pingServerNow()", function(){
-
-    beforeEach(function() {
-      jasmine.Ajax.install();
-      serverPinger = new ServerPinger(pingPath);
-
-      jasmine.Ajax.stubRequest(pingPath).andReturn({
-        status: 200
+  describe("pingServerNow()", function() {
+    it("pings the server immediately and records the time", function() {
+      var jqueryPost = spyOn($, 'post').and.callFake(function(){
+        // pretend to do the ajax request
       });
-
-    });
-
-    afterEach(function() {
-      jasmine.Ajax.uninstall();
-    });
-
-
-    it("pings the server immediately", function() {
-      var ajaxSpy = spyOn($, 'post');
+      var setLastPingedAtCallback = spyOn(serverPinger, 'setLastPingedAt');
       serverPinger.pingServerNow();
-      expect(ajaxSpy).toHaveBeenCalledWith(pingPath, any(Function));
+      expect(jqueryPost).toHaveBeenCalledWith(pingPath, setLastPingedAtCallback);
+    });
+  });
+
+  describe("pingServerWithThrottling()", function() {
+
+    var pingServerNow;
+    beforeEach(function(){
+      pingServerNow = spyOn(serverPinger, 'pingServerNow')
+      spyOn(serverPinger, 'currentTime').and.returnValue(20);
     });
 
-    it("records that the server was pinged", function(){
-      expect(serverPinger.lastPinged).toBeUndefined();
-      serverPinger.pingServerNow();
-      spyOn(serverPinger, "currentTime").andReturn("a minute ago");
-      expect(serverPinger.lastPinged).toEqual("a minute ago");
+    describe("when throttling at 10ms and there has never been a ping", function(){
+      it("pings the server", function() {
+        serverPinger.pingServerWithThrottling();
+        expect(pingServerNow).toHaveBeenCalled();
+      });
+    })
+
+    describe("when throttling at 10ms and it has been 9ms since the last ping", function(){
+      it("does not ping the server", function() {
+        serverPinger.lastPingedAt = 11;
+        serverPinger.pingServerWithThrottling();
+        expect(pingServerNow).not.toHaveBeenCalled();
+      });
     });
 
+    describe("when throttling at 10ms and it has been 11ms since the last ping", function(){
+      it("pings the server", function() {
+        serverPinger.lastPingedAt = 9;
+        serverPinger.pingServerWithThrottling();
+        expect(pingServerNow).toHaveBeenCalled();
+      });
+    });
+
+    describe("when throttling at 20ms and it has been 11ms since the last ping", function(){
+      it("does not ping the server", function() {
+        serverPinger.lastPingedAt = 9;
+        serverPinger.pingServerWithThrottling(20);
+        expect(pingServerNow).not.toHaveBeenCalled();
+      });
+    });
+  });
+
+  describe("setLastPingedAt()", function(){
+    it("records that the server was pinged", function() {
+      spyOn(serverPinger, 'currentTime').and.returnValue("right now")
+      expect(serverPinger.lastPingedAt).toBeUndefined();
+      serverPinger.setLastPingedAt();
+      expect(serverPinger.lastPingedAt).toEqual("right now");
+    });
   });
 
 });

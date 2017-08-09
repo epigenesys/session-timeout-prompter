@@ -9,17 +9,30 @@ var ServerPinger = (function () {
     _classCallCheck(this, ServerPinger);
 
     this.pingPath = pingPath;
-    this.lastPinged = undefined;
+    this.lastPingedAt = undefined;
   }
 
   _createClass(ServerPinger, [{
     key: "pingServerNow",
     value: function pingServerNow() {
-      var _this = this;
+      $.post(this.pingPath, this.setLastPingedAt);
+    }
+  }, {
+    key: "pingServerWithThrottling",
+    value: function pingServerWithThrottling() {
+      var ms_to_throttle = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
 
-      $.post(this.pingPath, function () {
-        _this.lastPinged = _this.currentTime();
-      });
+      if (!this.lastPingedAt || this.currentTime() - this.lastPingedAt > ms_to_throttle) {
+        this.pingServerNow();
+      }
+    }
+
+    // Private
+
+  }, {
+    key: "setLastPingedAt",
+    value: function setLastPingedAt() {
+      this.lastPingedAt = this.currentTime();
     }
   }, {
     key: "currentTime",

@@ -16,7 +16,7 @@ Require the js: `//= session_timeout_prompter`
 
 Require the css `*= require session_timeout_prompter`
 
-Add `= session_timeout_prompter(timeout_in: User.timeout_in, scope: :user)` after the body tag in your layout. (Assuming you are using Devise and are using a scope/model called User).
+Add `= session_timeout_prompter(session_timeout_in_seconds: User.timeout_in.to_i, timeout_warning_in_seconds: 305, scope: :user)` after the body tag in your layout. (Assuming you are using Devise and are using a scope/model called User).
 
 
 Configurables:

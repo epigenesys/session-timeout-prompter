@@ -4,151 +4,51 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-(function ($) {
-  // Prompt when 5 minutes remaining before timeout
-  var LATENCY_ADJUSTMENT = 5;
-  var PROMPT_WHEN_X_SECONDS_LEFT = 300 + LATENCY_ADJUSTMENT;
+var Bootstrap3PromptRenderer = (function () {
 
-  var SessionTimeoutChecker = (function () {
-    function SessionTimeoutChecker(element) {
-      _classCallCheck(this, SessionTimeoutChecker);
+  // timeoutWarningModal:    the jquery object for the Bootstrap3 modal to display
+  //                         when the session is about to time out
+  // timedOutModal:          the jquery object for the Bootstrap3 modal to display
+  //                         when the session has timed out
+  // remainingTextContainer: the jquery object for the display of the time remaining
 
-      this.tick = this.tick.bind(this);
-      this.sessionKey = element.data('session-key');
+  function Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer) {
+    _classCallCheck(this, Bootstrap3PromptRenderer);
 
-      this.sessionTimeoutInSeconds = parseInt(element.data('timeout-in'));
-      this.serverPinger = new ServerPinger(element.data('server-ping-path'));
-
-      this.aboutToTimeoutPrompt = $('#session-timeout-prompter-about-to-timeout');
-      this.timedOutPrompt = $('#session-timeout-prompter-session-timed-out');
-
-      this.promptingSessionTimeout = false;
-
-      this.setTimeoutAt();
-      this.addListeners();
-    }
-
-    _createClass(SessionTimeoutChecker, [{
-      key: 'addListeners',
-      value: function addListeners() {
-        var _this = this;
-
-        this.aboutToTimeoutPrompt.on('click', '#session-timeout-prompter-remain-logged-in-btn', function () {
-          _this.promptingSessionTimeout = false;
-          _this.aboutToTimeoutPrompt.modal('hide');
-          _this.stop();
-          return _this.pingServerNow();
-        });
-
-        return $(window).on('storage', function (e) {
-          var event = e.originalEvent;
-          if (event.key === _this.sessionKey) {
-            _this.hideAllPrompts();
-            _this.stop();
-            _this.timeoutAt = event.newValue;
-            return _this.start();
-          }
-        });
-      }
-    }, {
-      key: 'showAboutToTimeoutPrompt',
-      value: function showAboutToTimeoutPrompt(timeLeftInSeconds) {
-        if (!this.promptingSessionTimeout) {
-          this.promptingSessionTimeout = true;
-          this.aboutToTimeoutPrompt.modal('show');
-        }
-
-        var minutesForDisplay = Math.floor(timeLeftInSeconds / 60);
-        var secondsForDisplay = Math.floor(timeLeftInSeconds - minutesForDisplay * 60);
-
-        return $('#session-timeout-prompter-about-to-timeout-in', this.aboutToTimeoutPrompt).text(minutesForDisplay + 'm ' + secondsForDisplay + 's');
-      }
-    }, {
-      key: 'showTimeoutPrompt',
-      value: function showTimeoutPrompt() {
-        this.aboutToTimeoutPrompt.modal('hide');
-        this.timedOutPrompt.modal('show');
-        return this.stop();
-      }
-    }, {
-      key: 'hideAllPrompts',
-      value: function hideAllPrompts() {
-        this.promptingSessionTimeout = false;
-        this.aboutToTimeoutPrompt.modal('hide');
-        return this.timedOutPrompt.modal('hide');
-      }
-    }, {
-      key: 'pingServerNow',
-      value: function pingServerNow() {
-        this.serverPinger.pingServerNow();
-      }
-    }, {
-      key: 'pingServerWithThrottling',
-      value: function pingServerWithThrottling() {
-        if (!this.promptingSessionTimeout) {
-          this.serverPinger.pingServerNow();
-        }
-      }
-    }]);
-
-    return SessionTimeoutChecker;
-  })();
-
-  $.fn.sessionTimoutChecker = function (action) {
-    return this.each(function () {
-      var timeoutChecker = $(this).data('session-timeout-checker');
-      if (timeoutChecker == null) {
-        $(this).data('session-timeout-checker', timeoutChecker = new SessionTimeoutChecker($(this)));
-      }
-
-      return timeoutChecker[action]();
-    });
-  };
-
-  return $(function () {
-    if ($('#session-timeout-prompter-container').is('[data-timeout-in]')) {
-      var _ret = (function () {
-        $('#session-timeout-prompter-container').sessionTimoutChecker('start');
-        $(document).ajaxComplete(function () {
-          return $('#session-timeout-prompter-container').sessionTimoutChecker('restart');
-        });
-
-        var pingServer = function pingServer() {
-          return $('#session-timeout-prompter-container').sessionTimoutChecker('pingServerWithInterval');
-        };
-
-        $(window).scroll(pingServer);
-        $(document).on('keydown click', pingServer);
-        return {
-          v: $(document).on('ajax-modal-show', function () {
-            return $('#modalWindow').scroll(pingServer);
-          })
-        };
-      })();
-
-      if (typeof _ret === 'object') return _ret.v;
-    }
-  });
-})(jQuery);
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var PromptRenderer = (function () {
-  function PromptRenderer() {
-    _classCallCheck(this, PromptRenderer);
+    this.timeoutWarningModal = timeoutWarningModal;
+    this.timedOutModal = timedOutModal;
   }
 
-  _createClass(PromptRenderer, [{
-    key: "renderTimedOut",
+  _createClass(Bootstrap3PromptRenderer, [{
+    key: 'renderTimedOut',
     value: function renderTimedOut() {
-      return "Your session moos";
+      this.timeoutWarningModal.modal('hide');
+      this.timedOutModal.modal('show');
+    }
+  }, {
+    key: 'renderTimeoutWarning',
+    value: function renderTimeoutWarning(timeLeftInSeconds) {
+      var wholeMinutesRemaining = Math.floor(timeLeftInSeconds / 60);
+      var additionalSecondsRemaining = Math.floor(timeLeftInSeconds - wholeMinutesRemaining * 60);
+      this.updateRemainingTimeText(wholeMinutesRemaining + 'm ' + additionalSecondsRemaining + 's');
+      this.timeoutWarningModal.modal('show');
+    }
+  }, {
+    key: 'hideAll',
+    value: function hideAll() {
+      this.timeoutWarningModal.modal('hide');
+      this.timedOutModal.modal('hide');
+    }
+
+    // Private
+  }, {
+    key: 'updateRemainingTimeText',
+    value: function updateRemainingTimeText(text) {
+      this.remainingTextContainer.text(text);
     }
   }]);
 
-  return PromptRenderer;
+  return Bootstrap3PromptRenderer;
 })();
 "use strict";
 
@@ -157,17 +57,17 @@ var _createClass = (function () { function defineProperties(target, props) { for
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
 var ServerPinger = (function () {
-  function ServerPinger(pingPath) {
+  function ServerPinger(serverPingPath) {
     _classCallCheck(this, ServerPinger);
 
-    this.pingPath = pingPath;
+    this.serverPingPath = serverPingPath;
     this.lastPingedAt = undefined;
   }
 
   _createClass(ServerPinger, [{
     key: "pingServerNow",
     value: function pingServerNow() {
-      jQuery.post(this.pingPath, this.setLastPingedAt);
+      jQuery.post(this.serverPingPath, this.setLastPingedAt);
     }
   }, {
     key: "pingServerWithThrottling",
@@ -180,7 +80,6 @@ var ServerPinger = (function () {
     }
 
     // Private
-
   }, {
     key: "setLastPingedAt",
     value: function setLastPingedAt() {
@@ -195,6 +94,107 @@ var ServerPinger = (function () {
 
   return ServerPinger;
 })();
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var SessionTimeoutPrompter = (function () {
+  function SessionTimeoutPrompter(configData) {
+    _classCallCheck(this, SessionTimeoutPrompter);
+
+    var serverPingPath = configData.serverPingPath;
+    var timeoutWarningInSeconds = configData.timeoutWarningInSeconds;
+    var sessionTimeoutInSeconds = configData.sessionTimeoutInSeconds;
+    var sessionKey = configData.sessionKey;
+
+    var timeoutWarningModal = jQuery('#session-timeout-prompter-timeout-warning-modal');
+    var timedOutModal = jQuery('#session-timeout-prompter-session-timed-out-modal');
+    var remainingTimeContainer = jQuery('#session-timeout-prompter-warning-timeout-in');
+
+    var promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTimeContainer);
+
+    this.timeoutTimer = new TimeoutTimer(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer);
+    this.serverPinger = new ServerPinger(serverPingPath);
+    this.remainLoggedInButton = jQuery('#session-timeout-prompter-remain-logged-in-btn');
+  }
+
+  _createClass(SessionTimeoutPrompter, [{
+    key: 'start',
+    value: function start() {
+      this.bindDefaultEvents();
+      this.timeoutTimer.start();
+    }
+
+    // Private
+
+  }, {
+    key: 'bindDefaultEvents',
+    value: function bindDefaultEvents() {
+      var _this = this;
+
+      // Restart the timer: This is triggered by any jquery ajax request completing,
+      // including pinging the server via our other events.
+      jQuery(document).ajaxComplete(function () {
+        _this.timeoutTimer.restart();
+      });
+
+      // Ping server on scroll
+      jQuery(window).on('scroll', function () {
+        _this.serverPinger.pingServerWithThrottling();
+      });
+
+      // Ping server when typing or clicking
+      jQuery(document).on('keydown click', function () {
+        _this.serverPinger.pingServerWithThrottling();
+      });
+
+      // When the user clicks the button to say they want to remain logged in we
+      // stop the timer to wait until it is restarted via via the ajaxComplete()
+      // event triggered by the ping
+      this.remainLoggedInButton.on('click', function () {
+        _this.serverPinger.pingServerNow();
+        _this.timeoutTimer.stop();
+      });
+
+      // Listen to the storage event fired in TuimeoutTimer to synchronise browser tabs
+      // if a user extends their session in one tab but has another open for example.
+      jQuery(window).on('storage', function (e) {
+        var event = e.originalEvent;
+        _this.timeoutTimer.localStorageUpdated(event.key, event.newValue);
+      });
+    }
+  }]);
+
+  return SessionTimeoutPrompter;
+})();
+"use strict";
+
+// jQuery(() => {
+//
+//   const timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
+//
+//   // If the container cannot be found then assume we don't need it on this page.
+//   if (timeoutPrompterContainer) {
+//     const configData = timeoutPrompterContainer.data();
+//     const sessionTimeoutPrompter = new SessiomTimeoutPrompter(configData);
+//     sessionTimeoutPrompter.start();
+//   }
+//
+//
+//
+//   // Ping server when scrolling inside a modal window
+//   // Event only exists if using ajax_modal from epiJs
+//   jQuery(document).on('ajax-modal-show', () => {
+//     jQuery('#modalWindow').scroll( () => {
+//       serverPinger.pingServerWithThrottling();
+//     });
+//   });
+//
+//   // TODO: Ability to plug in CKEditor to ping
+//
+// });
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -203,16 +203,19 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var TimeoutTimer = (function () {
 
-  // timeoutWarningInSeconds: warning that their session is about to timeout
+  // timeoutWarningInSeconds: Warning that their session is about to timeout
   //                          when there are this many minutes left.
-  // sessionTimeoutInSeconds: tell them their session has timed out when this
+  // sessionTimeoutInSeconds: Tell them their session has timed out when this
   //                          many minutes have elapsed.
+  // sessionKey:              Unique key for this session - used in local storage
+  //                          to make sure multiple browser tabs are synched.
 
-  function TimeoutTimer(timeoutWarningInSeconds, sessionTimeoutInSeconds, promptRenderer) {
+  function TimeoutTimer(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer) {
     _classCallCheck(this, TimeoutTimer);
 
     this.sessionTimeoutInSeconds = sessionTimeoutInSeconds;
     this.timeoutWarningInSeconds = timeoutWarningInSeconds;
+    this.sessionKey = sessionKey;
     this.promptRenderer = promptRenderer;
     this.tickInterval = undefined;
     this.timeoutAt = undefined;
@@ -233,6 +236,7 @@ var TimeoutTimer = (function () {
   }, {
     key: "stop",
     value: function stop() {
+      this.promptRenderer.hideAll();
       clearInterval(this.tickInterval);
     }
   }, {
@@ -242,9 +246,17 @@ var TimeoutTimer = (function () {
       this.recalculateTimeoutAt();
       this.start();
     }
+  }, {
+    key: "localStorageUpdated",
+    value: function localStorageUpdated(key, newTimeoutAt) {
+      if (key === this.sessionKey) {
+        this.stop();
+        this.timeoutAt = newTimeoutAt;
+        this.start();
+      }
+    }
 
     // Private
-
   }, {
     key: "tick",
     value: function tick() {
@@ -276,7 +288,7 @@ var TimeoutTimer = (function () {
     key: "recalculateTimeoutAt",
     value: function recalculateTimeoutAt() {
       this.timeoutAt = this.currentTimestamp() + this.sessionTimeoutInSeconds;
-      //localStorage.setItem(this.sessionKey, this.timeoutAt);
+      localStorage.setItem(this.sessionKey, this.timeoutAt);
     }
   }, {
     key: "currentTimestamp",

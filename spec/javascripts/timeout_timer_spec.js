@@ -2,11 +2,13 @@ describe("TimeoutTimer", function() {
 
   var promptRenderer;
   var timeoutTimer;
+  var sessionKey;
 
   beforeEach(function() {
     jasmine.clock().install();
     jasmine.clock().mockDate();
-    promptRenderer = { renderTimedOut: 'foo', renderTimeoutWarning: 'bar' };
+    promptRenderer = { renderTimedOut: 'foo', renderTimeoutWarning: 'bar', hideAll: function(){} };
+    sessionKey     = 'rightKey'
     spyOn(promptRenderer, 'renderTimedOut');
     spyOn(promptRenderer, 'renderTimeoutWarning');
   });
@@ -18,7 +20,7 @@ describe("TimeoutTimer", function() {
   describe("Timeout Warning", function(){
     describe("when the timeout is set to 20 seconds and the warning is set to 5 seconds", function() {
       beforeEach(function() {
-        timeoutTimer = new TimeoutTimer(5, 20, promptRenderer);
+        timeoutTimer = new TimeoutTimer(5, 20, sessionKey, promptRenderer);
         timeoutTimer.start();
       });
 
@@ -46,7 +48,7 @@ describe("TimeoutTimer", function() {
 
     describe("when the timeout is set to 30 seconds and the warning is set to 10 seconds", function() {
       beforeEach(function() {
-        timeoutTimer = new TimeoutTimer(10, 30, promptRenderer);
+        timeoutTimer = new TimeoutTimer(10, 30, sessionKey, promptRenderer);
         timeoutTimer.start();
       });
 
@@ -71,7 +73,7 @@ describe("TimeoutTimer", function() {
   describe("Timed Out", function(){
     describe("when the timeout is set to 20 seconds", function() {
       beforeEach(function() {
-        timeoutTimer = new TimeoutTimer(0, 20, promptRenderer);
+        timeoutTimer = new TimeoutTimer(0, 20, sessionKey, promptRenderer);
         timeoutTimer.start();
       });
 
@@ -99,7 +101,7 @@ describe("TimeoutTimer", function() {
 
     describe("when the timeout is set to 30 seconds", function() {
       beforeEach(function() {
-        timeoutTimer = new TimeoutTimer(0, 30, promptRenderer);
+        timeoutTimer = new TimeoutTimer(0, 30, sessionKey, promptRenderer);
         timeoutTimer.start();
       });
 
@@ -118,5 +120,26 @@ describe("TimeoutTimer", function() {
       });
     });
   }); // End describe Timeout Warning
+
+  describe("localStorageUpdated", function(){
+    describe("when the given key does not match the session key", function(){
+      it("does not update timeoutAt", function(){
+        timeoutTimer.sessionKey = 'rightKey';
+        timeoutTimer.timeoutAt  = 'oldValue';
+        timeoutTimer.localStorageUpdated('wrongKey', 'newValue');
+        expect(timeoutTimer.timeoutAt).toEqual('oldValue');
+      });
+    });
+
+    describe("when the given key matches the session key", function(){
+      it("updates timeoutAt to the new value", function(){
+        timeoutTimer.sessionKey = 'rightKey';
+        timeoutTimer.timeoutAt  = 'oldValue';
+        timeoutTimer.localStorageUpdated('rightKey', 'newValue');
+        expect(timeoutTimer.timeoutAt).toEqual('newValue');
+      });
+    });
+
+  });
 
 });

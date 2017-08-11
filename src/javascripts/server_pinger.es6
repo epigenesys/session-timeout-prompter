@@ -1,11 +1,11 @@
 class ServerPinger {
-  constructor(pingPath) {
-    this.pingPath     = pingPath;
-    this.lastPingedAt = undefined;
+  constructor(serverPingPath) {
+    this.serverPingPath = serverPingPath;
+    this.lastPingedAt   = undefined;
   }
 
   pingServerNow() {
-    jQuery.post(this.pingPath, this.setLastPingedAt);
+    jQuery.post(this.serverPingPath, this.setLastPingedAt);
   }
 
   pingServerWithThrottling(ms_to_throttle = 10) {
@@ -16,7 +16,6 @@ class ServerPinger {
 
 
   // Private
-
   setLastPingedAt() {
     this.lastPingedAt = this.currentTimestamp();
   }

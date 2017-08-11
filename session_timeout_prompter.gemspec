@@ -31,10 +31,19 @@ Gem::Specification.new do |spec|
   spec.require_paths = ["lib"]
 
   spec.add_dependency 'jquery-rails', '>= 4.0'
+  spec.add_dependency 'railties', '>= 4.0'
+  spec.add_dependency 'hamlit'
 
   spec.add_development_dependency "bundler", "~> 1.15"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency "rspec", ">= 3.0"
+  spec.add_development_dependency "rspec-rails", ">= 3.0"
+  spec.add_development_dependency "rails", ">= 4.0"
+  spec.add_development_dependency "capybara", ">= 2.4"
+  spec.add_development_dependency 'poltergeist'
+  spec.add_development_dependency 'launchy'
+  spec.add_development_dependency "byebug"
+  spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency "jasmine"
   spec.add_development_dependency "babel-transpiler"
 end

@@ -1,12 +1,12 @@
 #session-timeout-prompter-container{ data: container_data_attributes }
-  #session-timeout-prompter-about-to-timeout.session-timeout-prompter-modal.modal.fade{ data: { backdrop: 'static' } }
+  #session-timeout-prompter-timeout-warning-modal.session-timeout-prompter-modal.modal.fade{ data: { backdrop: 'static' } }
     .modal-dialog.modal-sm
       .modal-content
         .modal-body.text-center
           %p
             = session_timeout_prompter_translate :your_session_will_expire_in
             %br
-            %span#session-timeout-prompter-about-to-timeout-in.lead 3m 0s
+            %span#session-timeout-prompter-warning-timeout-in.lead 3m 0s
 
           %p= session_timeout_prompter_translate :do_you_wish_to_remain_logged_in
 
@@ -14,7 +14,7 @@
           %button.btn.btn-primary.btn-block#session-timeout-prompter-remain-logged-in-btn{ title: session_timeout_prompter_translate(:remain_logged_in_btn_title) }
             = fa_icon 'check', text: session_timeout_prompter_translate(:remain_logged_in_btn_text)
 
-  #session-timeout-prompter-session-timed-out.session-timeout-prompter-modal.modal.fade{ data: { backdrop: 'static' } }
+  #session-timeout-prompter-session-timed-out-modal.session-timeout-prompter-modal.modal.fade{ data: { backdrop: 'static' } }
     .modal-dialog.modal-sm
       .modal-content
         .modal-body.text-center

@@ -1,12 +1,15 @@
 class TimeoutTimer {
 
-  // timeoutWarningInSeconds: warning that their session is about to timeout
+  // timeoutWarningInSeconds: Warning that their session is about to timeout
   //                          when there are this many minutes left.
-  // sessionTimeoutInSeconds: tell them their session has timed out when this
+  // sessionTimeoutInSeconds: Tell them their session has timed out when this
   //                          many minutes have elapsed.
-  constructor(timeoutWarningInSeconds, sessionTimeoutInSeconds, promptRenderer) {
+  // sessionKey:              Unique key for this session - used in local storage
+  //                          to make sure multiple browser tabs are synched.
+  constructor(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer) {
     this.sessionTimeoutInSeconds = sessionTimeoutInSeconds;
     this.timeoutWarningInSeconds = timeoutWarningInSeconds;
+    this.sessionKey              = sessionKey;
     this.promptRenderer          = promptRenderer;
     this.tickInterval = undefined;
     this.timeoutAt    = undefined;
@@ -20,6 +23,7 @@ class TimeoutTimer {
   }
 
   stop() {
+    this.promptRenderer.hideAll();
     clearInterval(this.tickInterval);
   }
 
@@ -29,11 +33,17 @@ class TimeoutTimer {
     this.start();
   }
 
+  localStorageUpdated(key, newTimeoutAt) {
+    if (key === this.sessionKey) {
+      this.stop();
+      this.timeoutAt = newTimeoutAt;
+      this.start();
+    }
+  }
 
   // Private
-
   tick() {
-    var timeLeftInSeconds = this.timeoutAt - this.currentTimestamp();
+    const timeLeftInSeconds = this.timeoutAt - this.currentTimestamp();
     if (timeLeftInSeconds <= 0) {
       this.showTimedOutPrompt();
     } else if (timeLeftInSeconds <= this.timeoutWarningInSeconds) {
@@ -57,7 +67,7 @@ class TimeoutTimer {
   // is inherently innacurate.
   recalculateTimeoutAt() {
     this.timeoutAt = this.currentTimestamp() + this.sessionTimeoutInSeconds;
-    //localStorage.setItem(this.sessionKey, this.timeoutAt);
+    localStorage.setItem(this.sessionKey, this.timeoutAt);
   }
 
   currentTimestamp() {

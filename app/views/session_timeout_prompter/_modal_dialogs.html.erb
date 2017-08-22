@@ -1,0 +1,39 @@
+<% content_tag :div, id: "session-timeout-prompter-container", data: container_data_attributes do %>
+  <div class="session-timeout-prompter-modal modal fade" id="session-timeout-prompter-timeout-warning-modal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <p>
+            <%= session_timeout_prompter_translate :your_session_will_expire_in %>
+            <br/>
+            <span class="lead" id="session-timeout-prompter-warning-timeout-in">3m 0s</span>
+          </p>
+          <p>
+            <%= session_timeout_prompter_translate :do_you_wish_to_remain_logged_in %>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <button class="btn btn-primary btn-block" id="session-timeout-prompter-remain-logged-in-btn" title="<%= session_timeout_prompter_translate(:remain_logged_in_btn_title) %>">
+            <%= session_timeout_prompter_icon 'check', text: session_timeout_prompter_translate(:remain_logged_in_btn_text) %>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="session-timeout-prompter-modal modal fade" id="session-timeout-prompter-session-timed-out-modal" data-backdrop="static">
+    <div class="modal-dialog modal-sm">
+      <div class="modal-content">
+        <div class="modal-body text-center">
+          <p>
+            <%= session_timeout_prompter_translate :session_timeout_out %>
+          </p>
+        </div>
+        <div class="modal-footer">
+          <%= link_to new_session_timeout_prompter_session_path, title: session_timeout_prompter_translate(:log_in_again_btn_title), class: 'btn btn-primary btn-block' do %>
+            <%= session_timeout_prompter_translate :log_in_again_btn_text %>
+          <% end %>
+        </div>
+      </div>
+    </div>
+  </div>
+<% end %>

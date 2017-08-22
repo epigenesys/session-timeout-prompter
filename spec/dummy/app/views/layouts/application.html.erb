@@ -3,13 +3,12 @@
   <head>
     <title>Dummy</title>
     <%= csrf_meta_tags %>
-
     <%= stylesheet_link_tag    'application', media: 'all' %>
     <%= javascript_include_tag 'application' %>
   </head>
 
   <body>
-    <%= session_timeout_prompter(session_timeout_in_seconds: 3000, timeout_warning_in_seconds: 305, scope: :user) %>
+    <%= session_timeout_prompter(session_timeout_in_seconds: 3000, timeout_warning_in_seconds: 3, scope: :user) %>
     <%= yield %>
   </body>
 </html>

@@ -8,5 +8,8 @@ require 'capybara/poltergeist'
 RSpec.configure do |config|
   config.include Rails.application.routes.url_helpers
 end
+Capybara.register_driver :poltergeist do |app|
+  Capybara::Poltergeist::Driver.new(app, inspector: true)
+end
 
 Capybara.javascript_driver = :poltergeist

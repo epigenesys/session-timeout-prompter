@@ -23,6 +23,8 @@ Configurables:
 
 Modify routes... TODO... due to the inherent inaccuracy of timing in Javascript it is advisable to go via logout to make sure they're actually logged out to avoid confusion.
 
+destroy_user_session_path
+
 ## Usage
 
 TODO: Write usage instructions here

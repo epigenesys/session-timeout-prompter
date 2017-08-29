@@ -6,7 +6,7 @@ jQuery(() => {
   // If the container cannot be found then assume we don't need timeout prompting on this page.
   if (timeoutPrompterContainer) {
     const configData = timeoutPrompterContainer.data();
-    const sessionTimeoutPrompter = new SessiomTimeoutPrompter(configData);
+    const sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
     sessionTimeoutPrompter.start();
   }
 

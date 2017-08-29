@@ -1,6 +1,8 @@
 require_relative 'boot'
 
 require 'rails/all'
+require 'jquery-rails'
+require 'bootstrap-sass'
 
 Bundler.require(*Rails.groups)
 require "session_timeout_prompter"

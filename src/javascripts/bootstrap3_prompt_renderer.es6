@@ -6,8 +6,9 @@ class Bootstrap3PromptRenderer {
   //                         when the session has timed out
   // remainingTextContainer: the jquery object for the display of the time remaining
   constructor(timeoutWarningModal, timedOutModal, remainingTextContainer) {
-    this.timeoutWarningModal = timeoutWarningModal;
-    this.timedOutModal       = timedOutModal;
+    this.timeoutWarningModal    = timeoutWarningModal;
+    this.timedOutModal          = timedOutModal;
+    this.remainingTextContainer = remainingTextContainer;
   }
 
   renderTimedOut() {

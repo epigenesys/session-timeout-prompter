@@ -1,4 +1,4 @@
-<% content_tag :div, id: "session-timeout-prompter-container", data: container_data_attributes do %>
+<%= content_tag :div, id: "session-timeout-prompter-container", data: container_data_attributes do %>
   <div class="session-timeout-prompter-modal modal fade" id="session-timeout-prompter-timeout-warning-modal" data-backdrop="static">
     <div class="modal-dialog modal-sm">
       <div class="modal-content">
@@ -25,7 +25,7 @@
       <div class="modal-content">
         <div class="modal-body text-center">
           <p>
-            <%= session_timeout_prompter_translate :session_timeout_out %>
+            <%= session_timeout_prompter_translate :session_timed_out %>
           </p>
         </div>
         <div class="modal-footer">

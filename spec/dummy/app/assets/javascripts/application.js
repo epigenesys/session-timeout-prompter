@@ -10,4 +10,7 @@
 // Read Sprockets README (https://github.com/rails/sprockets#sprockets-directives) for details
 // about supported directives.
 //
-// require session_timeout_prompter
+//= require jquery
+//= require jquery_ujs
+//= require bootstrap
+//= require session_timeout_prompter

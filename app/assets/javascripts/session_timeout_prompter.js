@@ -17,6 +17,7 @@ var Bootstrap3PromptRenderer = (function () {
 
     this.timeoutWarningModal = timeoutWarningModal;
     this.timedOutModal = timedOutModal;
+    this.remainingTextContainer = remainingTextContainer;
   }
 
   _createClass(Bootstrap3PromptRenderer, [{
@@ -169,32 +170,29 @@ var SessionTimeoutPrompter = (function () {
 
   return SessionTimeoutPrompter;
 })();
-"use strict";
+'use strict';
 
-// jQuery(() => {
-//
-//   const timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
-//
-//   // If the container cannot be found then assume we don't need it on this page.
-//   if (timeoutPrompterContainer) {
-//     const configData = timeoutPrompterContainer.data();
-//     const sessionTimeoutPrompter = new SessiomTimeoutPrompter(configData);
-//     sessionTimeoutPrompter.start();
-//   }
-//
-//
-//
-//   // Ping server when scrolling inside a modal window
-//   // Event only exists if using ajax_modal from epiJs
-//   jQuery(document).on('ajax-modal-show', () => {
-//     jQuery('#modalWindow').scroll( () => {
-//       serverPinger.pingServerWithThrottling();
-//     });
+jQuery(function () {
+
+  var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
+
+  // If the container cannot be found then assume we don't need timeout prompting on this page.
+  if (timeoutPrompterContainer) {
+    var configData = timeoutPrompterContainer.data();
+    var sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
+    sessionTimeoutPrompter.start();
+  }
+});
+
+// Ping server when scrolling inside a modal window
+// Event only exists if using ajax_modal from epiJs
+// jQuery(document).on('ajax-modal-show', () => {
+//   jQuery('#modalWindow').scroll( () => {
+//     serverPinger.pingServerWithThrottling();
 //   });
-//
-//   // TODO: Ability to plug in CKEditor to ping
-//
 // });
+
+// TODO: Ability to plug in CKEditor to ping
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

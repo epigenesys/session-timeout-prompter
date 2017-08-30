@@ -8,7 +8,6 @@
   </head>
 
   <body>
-    <%= session_timeout_prompter(session_timeout_in_seconds: 5, timeout_warning_in_seconds: 3, scope: :user) %>
     <div class="container">
       <%= yield %>
     </div>

@@ -50,7 +50,7 @@ class SessionTimeoutPrompter {
       this.timeoutTimer.stop();
     });
 
-    // Listen to the storage event fired in TuimeoutTimer to synchronise browser tabs
+    // Listen to the storage event fired in TimeoutTimer to synchronise browser tabs
     // if a user extends their session in one tab but has another open for example.
     jQuery(window).on('storage', e => {
       const event = e.originalEvent;

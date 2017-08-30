@@ -5,7 +5,8 @@ class ServerPinger {
   }
 
   pingServerNow() {
-    jQuery.post(this.serverPingPath, this.setLastPingedAt);
+    const callback = ()=> { this.setLastPingedAt() }
+    jQuery.post(this.serverPingPath, callback);
   }
 
   pingServerWithThrottling(ms_to_throttle = 10) {

@@ -68,7 +68,12 @@ var ServerPinger = (function () {
   _createClass(ServerPinger, [{
     key: "pingServerNow",
     value: function pingServerNow() {
-      jQuery.post(this.serverPingPath, this.setLastPingedAt);
+      var _this = this;
+
+      var callback = function callback() {
+        _this.setLastPingedAt();
+      };
+      jQuery.post(this.serverPingPath, callback);
     }
   }, {
     key: "pingServerWithThrottling",
@@ -159,7 +164,7 @@ var SessionTimeoutPrompter = (function () {
         _this.timeoutTimer.stop();
       });
 
-      // Listen to the storage event fired in TuimeoutTimer to synchronise browser tabs
+      // Listen to the storage event fired in TimeoutTimer to synchronise browser tabs
       // if a user extends their session in one tab but has another open for example.
       jQuery(window).on('storage', function (e) {
         var event = e.originalEvent;
@@ -177,7 +182,7 @@ jQuery(function () {
   var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
 
   // If the container cannot be found then assume we don't need timeout prompting on this page.
-  if (timeoutPrompterContainer) {
+  if (timeoutPrompterContainer.length) {
     var configData = timeoutPrompterContainer.data();
     var sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
     sessionTimeoutPrompter.start();

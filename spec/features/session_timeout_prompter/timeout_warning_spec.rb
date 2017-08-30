@@ -8,9 +8,8 @@ feature "Timeout Warning", js: true do
 
   context "when the timeout is set at 5 seconds" do
     context "and the timeout warning is set to 3 seconds" do
-      # Setup: spec/dummy/app/views/layout/application.html.erb
 
-      before { visit root_path }
+      before { visit timeout_5_warning_3_path }
 
       context "and 1 second has passed" do
         before { sleep 1 }
@@ -21,15 +20,15 @@ feature "Timeout Warning", js: true do
       end
 
       context "and 2 seconds have passed" do
+        before { sleep 2.5 }
+
         scenario "I see the prompt" do
-          Timeout.timeout(2.5, TimeoutWarningNotFound) do
-            begin
-              loop until first(:css, '*', text: timeout_warning_text, visible: true)
-            rescue TimeoutWarningNotFound
-              fail "timeout prompt not found"
-            end
-          end
-          expect(true).to be_truthy
+          expect(page).to have_content timeout_warning_text
+        end
+
+        scenario "I can indicate I wish to remain logged in" do
+          click_button 'Yes keep me logged in - I am still using the system'
+          expect(page).not_to have_content timeout_warning_text
         end
       end
 

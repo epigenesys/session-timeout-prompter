@@ -1,4 +1,7 @@
 class PagesController < ApplicationController
-  def home
+  def timeout_5_warning_3
+  end
+
+  def login
   end
 end

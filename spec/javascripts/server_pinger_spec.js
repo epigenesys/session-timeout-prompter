@@ -11,10 +11,11 @@ describe("ServerPinger", function() {
     it("pings the server immediately and records the time", function() {
       var jqueryPost = spyOn(jQuery, 'post').and.callFake(function(){
         // pretend to do the ajax request
+        serverPinger.setLastPingedAt();
       });
-      var setLastPingedAtCallback = spyOn(serverPinger, 'setLastPingedAt');
+      spyOn(Date, 'getTime').andReturn(500)
       serverPinger.pingServerNow();
-      expect(jqueryPost).toHaveBeenCalledWith(pingPath, setLastPingedAtCallback);
+      expect(lastPingedAt).to equal 0.5;
     });
   });
 

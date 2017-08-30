@@ -7,11 +7,10 @@ feature "Timed Out", js: true do
   end
 
   context "when the timeout is set at 5 seconds" do
-    # Setup: spec/dummy/app/views/layout/application.html.erb
 
-    before { visit root_path }
+    before { visit timeout_5_warning_3_path }
 
-    context "and 3 seconds has passed" do
+    context "and 3 seconds have passed" do
       before { sleep 3 }
 
       scenario "I do not see the prompt" do
@@ -19,16 +18,16 @@ feature "Timed Out", js: true do
       end
     end
 
-    context "and  more than 5 seconds have passed" do
+    context "and more than 5 seconds have passed" do
+      before { sleep 6 }
+
       scenario "I see the prompt" do
-        Timeout.timeout(6, TimedOutNotFound) do
-          begin
-            loop until first(:css, '*', text: timed_out_text, visible: true)
-          rescue TimedOutNotFound
-            fail "timed out prompt not found"
-          end
-        end
-        expect(true).to be_truthy
+        expect(page).to have_content timed_out_text
+      end
+
+      scenario "I can opt to log in again" do
+        click_link "Log in again"
+        expect(page).to have_content "Log in here"
       end
     end
 

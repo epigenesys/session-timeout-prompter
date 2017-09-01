@@ -9,18 +9,22 @@ module SessionTimeoutPrompter
     # scope:       e.g. :user - most often the name of the Devise scope/model
     #
     # session_key: Unique key for this app and scope - used to enable multi-tab support
-    def session_timeout_prompter(session_timeout_in_seconds:, timeout_warning_in_seconds:, scope:)
+    def init_session_timeout_prompter(session_timeout_in_seconds:, timeout_warning_in_seconds:, scope:)
       render(
         partial: "session_timeout_prompter/modal_dialogs",
         locals: {
           container_data_attributes: {
-            server_ping_path:   session_timeout_prompter_server_pings_path,
+            server_ping_path:   session_timeout_prompter.server_pings_path,
             session_timeout_in_seconds: session_timeout_in_seconds,
             timeout_warning_in_seconds: timeout_warning_in_seconds,
             session_key:      "#{::Rails.application.class.parent_name.downcase}-#{scope}"
           }
         }
       )
+    end
+
+    def session_timeout_prompter_translate(key)
+      I18n.t("session_timeout_prompter.#{key}")
     end
 
     # Don't create a dependency on FontAwesome

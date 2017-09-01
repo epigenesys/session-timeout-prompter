@@ -25,22 +25,18 @@ describe("SessionTimeoutPrompter", function() {
     });
   });
 
-  describe("events", function(){
-    var ping;
-    beforeEach(function(){
-      setFixtures('<div id="some-element"></div>');
-      ping = spyOn(sessionTimeoutPrompter.serverPinger, 'pingServerWithThrottling').and.callFake(
-        function(){ return true; }
-      );
-      sessionTimeoutPrompter.bindDefaultEvents();
+  describe("start", function(){
+
+    it("binds default events and starts the timer", function(){
+      var bindEventsSpy = spyOn(sessionTimeoutPrompter, 'bindDefaultEvents');
+      var startTimerSpy = spyOn(sessionTimeoutPrompter.timeoutTimer, 'start');
+
+      sessionTimeoutPrompter.start();
+
+      expect(bindEventsSpy).toHaveBeenCalled();
+      expect(startTimerSpy).toHaveBeenCalled();
     });
 
-    describe("when the user performs a mouse click", function(){
-      it("pings the server", function(){
-        document.getElementById('some-element').click();
-        expect(ping).toHaveBeenCalled();
-      });
-    });
   });
 
 });

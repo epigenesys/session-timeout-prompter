@@ -29,7 +29,7 @@
           </p>
         </div>
         <div class="modal-footer">
-          <%= link_to new_session_timeout_prompter_session_path, title: session_timeout_prompter_translate(:log_in_again_btn_title), class: 'btn btn-primary btn-block' do %>
+          <%= link_to session_timeout_prompter.new_session_path, title: session_timeout_prompter_translate(:log_in_again_btn_title), class: 'btn btn-primary btn-block' do %>
             <%= session_timeout_prompter_translate :log_in_again_btn_text %>
           <% end %>
         </div>

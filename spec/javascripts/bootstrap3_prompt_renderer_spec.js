@@ -3,11 +3,13 @@ describe("Bootstrap3PromptRenderer", function() {
   var promptRenderer;
   var timeoutWarningModal;
   var timedOutModal;
+  var remainingTextContainer;
 
   beforeEach(function() {
-    timeoutWarningModal = { modal: function(action) { } }
-    timedOutModal       = { modal: function(action) { } }
-    promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal);
+    timeoutWarningModal    = { modal: function(action) { } }
+    timedOutModal          = { modal: function(action) { } }
+    remainingTextContainer = { text: "" }
+    promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer);
   });
 
   describe("renderTimedOut", function() {
@@ -22,12 +24,8 @@ describe("Bootstrap3PromptRenderer", function() {
 
   describe("renderTimeoutWarning", function() {
     var timeoutWarningSpy;
-    var updateTimeRemainingSpy;
 
     beforeEach(function() {
-      updateTimeRemainingSpy = spyOn(promptRenderer, 'updateRemainingTimeText').and.callFake(function(){
-        // Do some text updating...
-      })
       timeoutWarningSpy = spyOn(timeoutWarningModal, 'modal');
     });
 
@@ -35,14 +33,14 @@ describe("Bootstrap3PromptRenderer", function() {
     describe("when the number of seconds remaining is 63", function() {
       it("updates the remaining time text with 1m 3s", function() {
         promptRenderer.renderTimeoutWarning(63);
-        expect(updateTimeRemainingSpy).toHaveBeenCalledWith('1m 3s')
+        expect(remainingTextContainer.text).toEqual('1m 3s')
       });
     });
 
     describe("when the number of seconds remaining is 336", function() {
       it("updates the remaining time text with 5m 36s", function() {
         promptRenderer.renderTimeoutWarning(336);
-        expect(updateTimeRemainingSpy).toHaveBeenCalledWith('5m 36s')
+        expect(remainingTextContainer.text).toEqual('5m 36s')
       });
     });
 
@@ -50,6 +48,13 @@ describe("Bootstrap3PromptRenderer", function() {
       promptRenderer.renderTimeoutWarning();
       expect(timeoutWarningSpy).toHaveBeenCalledWith('show');
     });
+
+    // describe("when 18 seconds have passed", function() {
+    //   it("will have only triggered a single warning", function() {
+    //     jasmine.clock().tick(18001);
+    //     expect(promptRenderer.renderTimeoutWarning).toHaveBeenCalledTimes(1);
+    //   });
+    // });
   });
 
   describe("hideAll", function() {

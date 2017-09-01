@@ -9,6 +9,7 @@ class Bootstrap3PromptRenderer {
     this.timeoutWarningModal    = timeoutWarningModal;
     this.timedOutModal          = timedOutModal;
     this.remainingTextContainer = remainingTextContainer;
+    this.currentlyShowingWarningPrompt = false;
   }
 
   renderTimedOut() {
@@ -17,10 +18,11 @@ class Bootstrap3PromptRenderer {
   }
 
   renderTimeoutWarning(timeLeftInSeconds) {
-    const wholeMinutesRemaining      = Math.floor(timeLeftInSeconds / 60);
-    const additionalSecondsRemaining = Math.floor(timeLeftInSeconds - (wholeMinutesRemaining * 60));
-    this.updateRemainingTimeText(`${wholeMinutesRemaining}m ${additionalSecondsRemaining}s`)
-    this.timeoutWarningModal.modal('show');
+    this.updateRemainingTimeText(timeLeftInSeconds);
+    if (!this.currentlyShowingWarningPrompt) {
+      this.currentlyShowingWarningPrompt = true;
+      this.timeoutWarningModal.modal('show');
+    }
   }
 
   hideAll() {
@@ -28,10 +30,10 @@ class Bootstrap3PromptRenderer {
     this.timedOutModal.modal('hide');
   }
 
-
-  // Private
-  updateRemainingTimeText(text) {
-    this.remainingTextContainer.text(text);
+  updateRemainingTimeText(timeLeftInSeconds) {
+    const wholeMinutesRemaining      = Math.floor(timeLeftInSeconds / 60);
+    const additionalSecondsRemaining = Math.floor(timeLeftInSeconds - (wholeMinutesRemaining * 60));
+    this.remainingTextContainer.text(`${wholeMinutesRemaining}m ${additionalSecondsRemaining}s`);
   }
 
 }

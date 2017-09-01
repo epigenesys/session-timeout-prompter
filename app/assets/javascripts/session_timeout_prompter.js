@@ -18,6 +18,7 @@ var Bootstrap3PromptRenderer = (function () {
     this.timeoutWarningModal = timeoutWarningModal;
     this.timedOutModal = timedOutModal;
     this.remainingTextContainer = remainingTextContainer;
+    this.currentlyShowingWarningPrompt = false;
   }
 
   _createClass(Bootstrap3PromptRenderer, [{
@@ -29,10 +30,11 @@ var Bootstrap3PromptRenderer = (function () {
   }, {
     key: 'renderTimeoutWarning',
     value: function renderTimeoutWarning(timeLeftInSeconds) {
-      var wholeMinutesRemaining = Math.floor(timeLeftInSeconds / 60);
-      var additionalSecondsRemaining = Math.floor(timeLeftInSeconds - wholeMinutesRemaining * 60);
-      this.updateRemainingTimeText(wholeMinutesRemaining + 'm ' + additionalSecondsRemaining + 's');
-      this.timeoutWarningModal.modal('show');
+      this.updateRemainingTimeText(timeLeftInSeconds);
+      if (!this.currentlyShowingWarningPrompt) {
+        this.currentlyShowingWarningPrompt = true;
+        this.timeoutWarningModal.modal('show');
+      }
     }
   }, {
     key: 'hideAll',
@@ -40,12 +42,12 @@ var Bootstrap3PromptRenderer = (function () {
       this.timeoutWarningModal.modal('hide');
       this.timedOutModal.modal('hide');
     }
-
-    // Private
   }, {
     key: 'updateRemainingTimeText',
-    value: function updateRemainingTimeText(text) {
-      this.remainingTextContainer.text(text);
+    value: function updateRemainingTimeText(timeLeftInSeconds) {
+      var wholeMinutesRemaining = Math.floor(timeLeftInSeconds / 60);
+      var additionalSecondsRemaining = Math.floor(timeLeftInSeconds - wholeMinutesRemaining * 60);
+      this.remainingTextContainer.text(wholeMinutesRemaining + 'm ' + additionalSecondsRemaining + 's');
     }
   }]);
 
@@ -146,16 +148,6 @@ var SessionTimeoutPrompter = (function () {
         _this.timeoutTimer.restart();
       });
 
-      // Ping server on scroll
-      jQuery(window).on('scroll', function () {
-        _this.serverPinger.pingServerWithThrottling();
-      });
-
-      // Ping server when typing or clicking
-      jQuery(document).on('keydown click', function () {
-        _this.serverPinger.pingServerWithThrottling();
-      });
-
       // When the user clicks the button to say they want to remain logged in we
       // stop the timer to wait until it is restarted via via the ajaxComplete()
       // event triggered by the ping
@@ -222,7 +214,6 @@ var TimeoutTimer = (function () {
     this.promptRenderer = promptRenderer;
     this.tickInterval = undefined;
     this.timeoutAt = undefined;
-    this.currentlyShowingWarningPrompt = false;
     this.recalculateTimeoutAt();
   }
 
@@ -279,10 +270,7 @@ var TimeoutTimer = (function () {
   }, {
     key: "showTimeoutWarningPrompt",
     value: function showTimeoutWarningPrompt(timeLeftInSeconds) {
-      if (!this.currentlyShowingWarningPrompt) {
-        this.currentlyShowingWarningPrompt = true;
-        this.promptRenderer.renderTimeoutWarning(timeLeftInSeconds);
-      }
+      this.promptRenderer.renderTimeoutWarning(timeLeftInSeconds);
     }
 
     // We need to use the system time rather than the setTimeout function as it

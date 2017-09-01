@@ -37,13 +37,6 @@ describe("TimeoutTimer", function() {
           expect(promptRenderer.renderTimeoutWarning).toHaveBeenCalledWith(5);
         });
       });
-
-      describe("when 18 seconds have passed", function() {
-        it("will have only triggered a single warning", function() {
-          jasmine.clock().tick(18001);
-          expect(promptRenderer.renderTimeoutWarning).toHaveBeenCalledTimes(1);
-        });
-      });
     });
 
     describe("when the timeout is set to 30 seconds and the warning is set to 10 seconds", function() {

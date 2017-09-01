@@ -1,5 +1,5 @@
 Rails.application.routes.draw do
-  mount SessionTimeoutPrompter::Rails::Engine => "/session_timeout_prompter"
+  mount SessionTimeoutPrompter::Engine, at: "/session_timeout_prompter"
 
   root to: 'pages#login'
 

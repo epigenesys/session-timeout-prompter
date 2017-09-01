@@ -32,16 +32,6 @@ class SessionTimeoutPrompter {
       this.timeoutTimer.restart();
     });
 
-    // Ping server on scroll
-    jQuery(window).on('scroll', () => {
-      this.serverPinger.pingServerWithThrottling();
-    });
-
-    // Ping server when typing or clicking
-    jQuery(document).on('keydown click', () => {
-      this.serverPinger.pingServerWithThrottling();
-    });
-
     // When the user clicks the button to say they want to remain logged in we
     // stop the timer to wait until it is restarted via via the ajaxComplete()
     // event triggered by the ping

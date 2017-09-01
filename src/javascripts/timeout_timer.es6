@@ -13,7 +13,6 @@ class TimeoutTimer {
     this.promptRenderer          = promptRenderer;
     this.tickInterval = undefined;
     this.timeoutAt    = undefined;
-    this.currentlyShowingWarningPrompt = false;
     this.recalculateTimeoutAt();
   }
 
@@ -57,10 +56,7 @@ class TimeoutTimer {
   }
 
   showTimeoutWarningPrompt(timeLeftInSeconds) {
-    if (!this.currentlyShowingWarningPrompt) {
-      this.currentlyShowingWarningPrompt = true;
-      this.promptRenderer.renderTimeoutWarning(timeLeftInSeconds);
-    }
+    this.promptRenderer.renderTimeoutWarning(timeLeftInSeconds);
   }
 
   // We need to use the system time rather than the setTimeout function as it

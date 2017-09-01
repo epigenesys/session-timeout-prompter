@@ -13,9 +13,13 @@ describe("ServerPinger", function() {
         // pretend to do the ajax request
         serverPinger.setLastPingedAt();
       });
-      spyOn(Date, 'getTime').andReturn(500)
+      var currentDate = new Date();
+      spyOn(currentDate, 'getTime').and.returnValue(1000);
+      spyOn(window, 'Date').and.callFake(function() {
+        return currentDate;
+      });
       serverPinger.pingServerNow();
-      expect(lastPingedAt).to equal 0.5;
+      expect(serverPinger.lastPingedAt).toEqual(1);
     });
   });
 

@@ -35,14 +35,16 @@ OptionParser.new do |opts|
 
 end.parse!
 
-unless options[:jasmine_only]
-  puts "Running RSpec..."
-end
+app = Rake.application
+app.init
+app.load_rakefile
 
 unless options[:rspec_only]
   puts "Running Jasmine..."
-  app = Rake.application
-  app.init
-  app.load_rakefile
   app['jasmine:ci'].invoke
+end
+
+unless options[:jasmine_only]
+  puts "Running RSpec..."
+  app['spec'].invoke
 end

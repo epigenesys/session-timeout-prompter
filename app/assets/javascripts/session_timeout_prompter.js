@@ -80,9 +80,9 @@ var ServerPinger = (function () {
   }, {
     key: "pingServerWithThrottling",
     value: function pingServerWithThrottling() {
-      var ms_to_throttle = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
+      var seconds_to_throttle = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
 
-      if (!this.lastPingedAt || this.currentTimestamp() - this.lastPingedAt > ms_to_throttle) {
+      if (!this.lastPingedAt || this.currentTimestamp() - this.lastPingedAt > seconds_to_throttle) {
         this.pingServerNow();
       }
     }
@@ -169,6 +169,7 @@ var SessionTimeoutPrompter = (function () {
 })();
 'use strict';
 
+var sessionTimeoutPrompter = undefined;
 jQuery(function () {
 
   var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
@@ -176,20 +177,10 @@ jQuery(function () {
   // If the container cannot be found then assume we don't need timeout prompting on this page.
   if (timeoutPrompterContainer.length) {
     var configData = timeoutPrompterContainer.data();
-    var sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
+    sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
     sessionTimeoutPrompter.start();
   }
 });
-
-// Ping server when scrolling inside a modal window
-// Event only exists if using ajax_modal from epiJs
-// jQuery(document).on('ajax-modal-show', () => {
-//   jQuery('#modalWindow').scroll( () => {
-//     serverPinger.pingServerWithThrottling();
-//   });
-// });
-
-// TODO: Ability to plug in CKEditor to ping
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();

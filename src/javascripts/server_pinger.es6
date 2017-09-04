@@ -9,8 +9,8 @@ class ServerPinger {
     jQuery.post(this.serverPingPath, callback);
   }
 
-  pingServerWithThrottling(ms_to_throttle = 10) {
-    if(!this.lastPingedAt || (this.currentTimestamp() - this.lastPingedAt) > ms_to_throttle) {
+  pingServerWithThrottling(seconds_to_throttle = 10) {
+    if(!this.lastPingedAt || (this.currentTimestamp() - this.lastPingedAt) > seconds_to_throttle) {
       this.pingServerNow();
     }
   }

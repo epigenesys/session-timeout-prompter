@@ -1,8 +1,6 @@
 # Session Timeout Prompter
 
-UNDER CONSTRUCTION
-
-Rails Engine to prompt the user when their session is about to timeout and allow them to extend it.
+A Rails Engine to prompt the user when their session is about to timeout and allow them to extend it.
 
 ## Installation
 
@@ -12,52 +10,108 @@ Add the gem to your Gemfile:
 gem 'session_timeout_prompter'
 ```
 
-Mount the engine in your routes: `mount SessionTimeoutPrompter::Engine at: "/session_timeout_prompter"`
+Mount the engine in your routes:
 
-Require the js: `//= session_timeout_prompter`
+```ruby
+mount SessionTimeoutPrompter::Engine at: "/session_timeout_prompter"`
+```
 
-Require the css: `*= require session_timeout_prompter`
+Require the js:
 
-Add `= session_timeout_prompter(session_timeout_in_seconds: User.timeout_in.to_i, timeout_warning_in_seconds: 305, scope: :user)` after the body tag in your layout. (Assuming you are using Devise timeoutable and are using a scope/model called User).
+```
+//= session_timeout_prompter
+```
 
-Configurables:
+Require the css:
 
-Modify routes... TODO... due to the inherent inaccuracy of timing in Javascript it is advisable to go via logout to make sure they're actually logged out to avoid confusion.
-
-destroy_user_session_path
-
-
-// Ping server on scroll
-jQuery(window).on('scroll', () => {
-  this.serverPinger.pingServerWithThrottling();
-});
-
-// Ping server when typing or clicking
-jQuery(document).on('keydown click', () => {
-  this.serverPinger.pingServerWithThrottling();
-});
-
+```
+*= require session_timeout_prompter
+```
 
 ## Usage
 
-TODO: Write usage instructions here
+Add the following after the body tag in your layout or on any page you wish to display the timeout prompt:
 
+```ruby
+= session_timeout_prompter(session_timeout_in_seconds: User.timeout_in.to_i, timeout_warning_in_seconds: 305, scope: :user)
+```
+(The example values assume you are using Devise timeoutable and are using a scope/model called User. The scope is purely so you can use multiple in the same application if necessary.)
+
+
+### Configurables
+
+#### "Log in again" path
+By default, clicking the "Log in again" button will go to your application's root path. Due to the inherent inaccuracy of timing in Javascript it is advisable to  make sure they're actually logged out to avoid confusion. To do this, simple override the controller action in your application:
+
+```ruby
+# app/controllers/session_timeout_prompter/sessions_controller.rb
+module SessionTimeoutPrompter
+  class SessionsController < ActionController::Base
+
+    def new
+      sign_out current_user
+      redirect_to new_user_session_path
+    end
+
+  end
+end
+```
+
+#### Keeping the session alive
+You can bind your own events to ping the server as follows:
+
+```javascript
+$(function(){
+  if(sessionTimeoutPrompter) {
+
+    // Ping server on scroll
+    $(window).on('scroll', () => {
+      serverPinger.pingServerWithThrottling();
+    });
+
+    // Ping server when typing or clicking
+    $(document).on('keydown click', () => {
+      serverPinger.pingServerWithThrottling();
+    });
+
+    // Ping server when scrolling inside a modal window
+    // (the ajax-modal-show event in this example is from ajax_modal in the epiJs gem)
+    $(document).on('ajax-modal-show', () => {
+      jQuery('#modalWindow').scroll( () => {
+        serverPinger.pingServerWithThrottling();
+      });
+    });
+
+    // Ping server when a key is pressed in CKEditor
+    CKEDITOR.on('instanceCreated', function(e) {
+      return e.editor.on('change', function() {
+        serverPinger.pingServerWithThrottling();
+      });
+    });
+
+  }
+});
+```
+
+#### I18n
+All of the text is rendered via Rails' standard I18n library. See `config/locales/en.yml`
 
 ## Development
 
-After checking out the repo, run `bin/setup` to install dependencies. Then, run `rake spec` to run the tests. You can also run `bin/console` for an interactive prompt that will allow you to experiment.
+After checking out the repo, run `bin/setup` to install dependencies.
 
-To install this gem onto your local machine, run `bundle exec rake install`. To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
+### ES6
 
-### ES6!
+The Javascript is written in ES6 and transpiled with Babel. The ES6 should be modified in `src/javascripts` and then transpiled to `app/assets/javascripts/session_timeout_prompter.js`. Currently we don't make use of modules (we'd need webpack or similar), but this would probably be an improvement going forward to control scope.
 
-The Javascript is written in ES6 and transpiled with Babel. The ES6 should be modified in `src/javascripts` and then transpiled to `app/assets/javascripts/session_timeout_prompter.js`.
-
-There is a handy script `./build` that will do the transpilation and run the tests.
+There is a handy script `./build` that will do the transpilation and run the tests. Run with --help for options.
 
 ### Testing
 
 Uses RSpec and Jasmine for automated testing. To run the Jasmine tests for the Javascript run `rake jasmine` and go to `localhost:8888` in your browser. The suite will run every time the page is reloaded.
+
+### Deployment
+To release a new version, update the version number in `version.rb`, and then run `bundle exec rake release`, which will create a git tag for the version, push git commits and tags, and push the `.gem` file to [rubygems.org](https://rubygems.org).
 
 ## Contributing
 

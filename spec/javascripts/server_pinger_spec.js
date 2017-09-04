@@ -31,14 +31,14 @@ describe("ServerPinger", function() {
       spyOn(serverPinger, 'currentTimestamp').and.returnValue(20);
     });
 
-    describe("when throttling at 10ms and there has never been a ping", function(){
+    describe("when throttling at 10s and there has never been a ping", function(){
       it("pings the server", function() {
         serverPinger.pingServerWithThrottling();
         expect(pingServerNow).toHaveBeenCalled();
       });
     })
 
-    describe("when throttling at 10ms and it has been 9ms since the last ping", function(){
+    describe("when throttling at 10s and it has been 9s since the last ping", function(){
       it("does not ping the server", function() {
         serverPinger.lastPingedAt = 11;
         serverPinger.pingServerWithThrottling();
@@ -46,7 +46,7 @@ describe("ServerPinger", function() {
       });
     });
 
-    describe("when throttling at 10ms and it has been 11ms since the last ping", function(){
+    describe("when throttling at 10s and it has been 11s since the last ping", function(){
       it("pings the server", function() {
         serverPinger.lastPingedAt = 9;
         serverPinger.pingServerWithThrottling();
@@ -54,7 +54,7 @@ describe("ServerPinger", function() {
       });
     });
 
-    describe("when throttling at 20ms and it has been 11ms since the last ping", function(){
+    describe("when throttling at 20s and it has been 11s since the last ping", function(){
       it("does not ping the server", function() {
         serverPinger.lastPingedAt = 9;
         serverPinger.pingServerWithThrottling(20);

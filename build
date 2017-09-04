@@ -9,20 +9,8 @@ require 'optparse'
 TARGET_JS_PATH = "#{File.dirname(__FILE__)}/app/assets/javascripts/session_timeout_prompter.js"
 SRC_DIRECTORY  = "#{File.dirname(__FILE__)}/src/javascripts"
 
-es6_files_to_transpile = Dir.glob("#{SRC_DIRECTORY}/**/*.es6")
-
-File.open TARGET_JS_PATH, 'w' do |output_file|
-
-  es6_files_to_transpile.each do |es6_file_path|
-    puts "Transpiling #{es6_file_path}..."
-    transpiled_es6 = Babel::Transpiler.transform File.read(es6_file_path)
-    output_file.puts transpiled_es6['code']
-  end
-
-end
-
 options = {}
-OptionParser.new do |opts|
+option_parser = OptionParser.new do |opts|
 
   opts.banner = "Usage: build [options]"
   opts.on("-j", "--jasmine", "Run Jasmine tests only") do |v|
@@ -33,18 +21,41 @@ OptionParser.new do |opts|
     options[:rspec_only] = v
   end
 
-end.parse!
+  opts.on("-h", "--help", "Show help") do |v|
+    options[:help] = v
+  end
 
-app = Rake.application
-app.init
-app.load_rakefile
-
-unless options[:rspec_only]
-  puts "Running Jasmine..."
-  app['jasmine:ci'].invoke
 end
+option_parser.parse!
 
-unless options[:jasmine_only]
-  puts "Running RSpec..."
-  app['spec'].invoke
+if options[:help]
+  puts option_parser.help()
+else
+
+  es6_files_to_transpile = Dir.glob("#{SRC_DIRECTORY}/**/*.es6")
+
+  File.open TARGET_JS_PATH, 'w' do |output_file|
+
+    es6_files_to_transpile.each do |es6_file_path|
+      puts "Transpiling #{es6_file_path}..."
+      transpiled_es6 = Babel::Transpiler.transform File.read(es6_file_path)
+      output_file.puts transpiled_es6['code']
+    end
+
+  end
+
+  app = Rake.application
+  app.init
+  app.load_rakefile
+
+  unless options[:rspec_only]
+    puts "Running Jasmine..."
+    app['jasmine:ci'].invoke
+  end
+
+  unless options[:jasmine_only]
+    puts "Running RSpec..."
+    app['spec'].invoke
+  end
+
 end

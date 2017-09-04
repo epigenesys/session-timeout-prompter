@@ -8,7 +8,7 @@ describe("Bootstrap3PromptRenderer", function() {
   beforeEach(function() {
     timeoutWarningModal    = { modal: function(action) { } }
     timedOutModal          = { modal: function(action) { } }
-    remainingTextContainer = { text: "" }
+    remainingTextContainer = jQuery('<div>');
     promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer);
   });
 
@@ -33,14 +33,14 @@ describe("Bootstrap3PromptRenderer", function() {
     describe("when the number of seconds remaining is 63", function() {
       it("updates the remaining time text with 1m 3s", function() {
         promptRenderer.renderTimeoutWarning(63);
-        expect(remainingTextContainer.text).toEqual('1m 3s')
+        expect(remainingTextContainer.text()).toEqual('1m 3s')
       });
     });
 
     describe("when the number of seconds remaining is 336", function() {
       it("updates the remaining time text with 5m 36s", function() {
         promptRenderer.renderTimeoutWarning(336);
-        expect(remainingTextContainer.text).toEqual('5m 36s')
+        expect(remainingTextContainer.text()).toEqual('5m 36s')
       });
     });
 
@@ -48,13 +48,6 @@ describe("Bootstrap3PromptRenderer", function() {
       promptRenderer.renderTimeoutWarning();
       expect(timeoutWarningSpy).toHaveBeenCalledWith('show');
     });
-
-    // describe("when 18 seconds have passed", function() {
-    //   it("will have only triggered a single warning", function() {
-    //     jasmine.clock().tick(18001);
-    //     expect(promptRenderer.renderTimeoutWarning).toHaveBeenCalledTimes(1);
-    //   });
-    // });
   });
 
   describe("hideAll", function() {

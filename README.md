@@ -79,7 +79,7 @@ $(function(){
     // Ping server when scrolling inside a modal window
     // (the ajax-modal-show event in this example is from ajax_modal in the epiJs gem)
     $(document).on('ajax-modal-show', function() {
-      jQuery('#modalWindow').scroll( function() {
+      $('#modalWindow').scroll( function() {
         serverPinger.pingServerWithThrottling();
       });
     });

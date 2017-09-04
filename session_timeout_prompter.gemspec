@@ -4,14 +4,13 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "session_timeout_prompter/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "session_timeout_prompter"
+  spec.name          = "Rails Session Timeout Prompter"
   spec.version       = SessionTimeoutPrompter::VERSION
   spec.authors       = ["Ant Nettleship"]
   spec.email         = ["anthony.nettleship@epigenesys.org.uk"]
 
-  spec.summary       = ""#%q{TODO: Write a short summary, because Rubygems requires one.}
-  spec.description   = ""#%q{TODO: Write a longer description or delete this line.}
-  spec.homepage      = ""#"TODO: Put your gem's website or public repo URL here."
+  spec.summary       = "A Rails Engine to prompt the user when their session is about to timeout and allow them to extend it."
+  spec.homepage      = "https://github.com/epigenesys/session-timeout-prompter"
   spec.license       = "MIT"
 
   # Prevent pushing this gem to RubyGems.org. To allow pushes either set the 'allowed_push_host'

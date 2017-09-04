@@ -28,6 +28,8 @@ Require the css:
 *= require session_timeout_prompter
 ```
 
+**Note:** Currently depends on jQuery for ajax / event handling.
+
 ## Usage
 
 Add the following after the body tag in your layout or on any page you wish to display the timeout prompt:

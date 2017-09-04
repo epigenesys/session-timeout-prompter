@@ -86,7 +86,7 @@ $(function(){
 
     // Ping server when a key is pressed in CKEditor
     CKEDITOR.on('instanceCreated', function(e) {
-      return e.editor.on('change', function() {
+      e.editor.on('change', function() {
         serverPinger.pingServerWithThrottling();
       });
     });

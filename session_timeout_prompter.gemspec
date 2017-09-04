@@ -4,7 +4,7 @@ $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
 require "session_timeout_prompter/version"
 
 Gem::Specification.new do |spec|
-  spec.name          = "Rails Session Timeout Prompter"
+  spec.name          = "session_timeout_prompter"
   spec.version       = SessionTimeoutPrompter::VERSION
   spec.authors       = ["Ant Nettleship"]
   spec.email         = ["anthony.nettleship@epigenesys.org.uk"]

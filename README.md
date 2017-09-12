@@ -10,10 +10,16 @@ Add the gem to your Gemfile:
 gem 'session_timeout_prompter'
 ```
 
+Run bundle install
+
+```ruby
+bundle install
+```
+
 Mount the engine in your routes:
 
 ```ruby
-mount SessionTimeoutPrompter::Engine at: "/session_timeout_prompter"`
+mount SessionTimeoutPrompter::Engine, at: "/session_timeout_prompter"
 ```
 
 Require the js:
@@ -35,7 +41,7 @@ Require the css:
 Add the following after the body tag in your layout or on any page you wish to display the timeout prompt:
 
 ```ruby
-= session_timeout_prompter(session_timeout_in_seconds: User.timeout_in.to_i, timeout_warning_in_seconds: 305, scope: :user)
+= init_session_timeout_prompter(session_timeout_in_seconds: User.timeout_in.to_i, seconds_to_warn_before_timeout: 305, scope: :user)
 ```
 (The example values assume you are using Devise timeoutable and are using a scope/model called User. The scope is purely so you can use multiple in the same application if necessary.)
 

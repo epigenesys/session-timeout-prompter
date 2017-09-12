@@ -38,4 +38,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'sqlite3'
   spec.add_development_dependency "jasmine"
   spec.add_development_dependency "babel-transpiler"
+  spec.add_development_dependency "phantomjs"
 end

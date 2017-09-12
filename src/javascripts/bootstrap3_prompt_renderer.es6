@@ -28,6 +28,7 @@ class Bootstrap3PromptRenderer {
   hideAll() {
     this.timeoutWarningModal.modal('hide');
     this.timedOutModal.modal('hide');
+    this.currentlyShowingWarningPrompt = false;
   }
 
   updateRemainingTimeText(timeLeftInSeconds) {

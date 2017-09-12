@@ -41,6 +41,7 @@ var Bootstrap3PromptRenderer = (function () {
     value: function hideAll() {
       this.timeoutWarningModal.modal('hide');
       this.timedOutModal.modal('hide');
+      this.currentlyShowingWarningPrompt = false;
     }
   }, {
     key: 'updateRemainingTimeText',

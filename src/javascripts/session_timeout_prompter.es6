@@ -2,7 +2,7 @@ class SessionTimeoutPrompter {
 
   constructor(configData) {
     const serverPingPath          = configData.serverPingPath;
-    const timeoutWarningInSeconds = configData.timeoutWarningInSeconds;
+    const secondsToWarnBeforeTimeout = configData.secondsToWarnBeforeTimeout;
     const sessionTimeoutInSeconds = configData.sessionTimeoutInSeconds;
     const sessionKey              = configData.sessionKey;
 
@@ -12,7 +12,7 @@ class SessionTimeoutPrompter {
 
     const promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTimeContainer);
 
-    this.timeoutTimer = new TimeoutTimer(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer);
+    this.timeoutTimer = new TimeoutTimer(secondsToWarnBeforeTimeout, sessionTimeoutInSeconds, sessionKey, promptRenderer);
     this.serverPinger = new ServerPinger(serverPingPath);
     this.remainLoggedInButton = jQuery('#session-timeout-prompter-remain-logged-in-btn');
   }

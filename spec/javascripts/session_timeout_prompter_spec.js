@@ -5,7 +5,7 @@ describe("SessionTimeoutPrompter", function() {
   beforeEach(function() {
     var configData =  {
       serverPingPath:          '/ping-it',
-      timeoutWarningInSeconds: 300,
+      secondsToWarnBeforeTimeout: 300,
       sessionTimeoutInSeconds: 1000,
       sessionKey:              'some-session-key'
     }
@@ -19,7 +19,7 @@ describe("SessionTimeoutPrompter", function() {
 
     it("sets up the TimeoutTimer with the correct timeout values and session key", function() {
       var timeoutTimer = sessionTimeoutPrompter.timeoutTimer;
-      expect(timeoutTimer.timeoutWarningInSeconds).toEqual(300);
+      expect(timeoutTimer.secondsToWarnBeforeTimeout).toEqual(300);
       expect(timeoutTimer.sessionTimeoutInSeconds).toEqual(1000);
       expect(timeoutTimer.sessionKey).toEqual('some-session-key');
     });

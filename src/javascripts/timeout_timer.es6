@@ -1,14 +1,14 @@
 class TimeoutTimer {
 
-  // timeoutWarningInSeconds: Warning that their session is about to timeout
+  // secondsToWarnBeforeTimeout: Warning that their session is about to timeout
   //                          when there are this many minutes left.
   // sessionTimeoutInSeconds: Tell them their session has timed out when this
   //                          many minutes have elapsed.
   // sessionKey:              Unique key for this session - used in local storage
   //                          to make sure multiple browser tabs are synched.
-  constructor(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer) {
+  constructor(secondsToWarnBeforeTimeout, sessionTimeoutInSeconds, sessionKey, promptRenderer) {
     this.sessionTimeoutInSeconds = sessionTimeoutInSeconds;
-    this.timeoutWarningInSeconds = timeoutWarningInSeconds;
+    this.secondsToWarnBeforeTimeout = secondsToWarnBeforeTimeout;
     this.sessionKey              = sessionKey;
     this.promptRenderer          = promptRenderer;
     this.tickInterval = undefined;
@@ -45,7 +45,7 @@ class TimeoutTimer {
     const timeLeftInSeconds = this.timeoutAt - this.currentTimestamp();
     if (timeLeftInSeconds <= 0) {
       this.showTimedOutPrompt();
-    } else if (timeLeftInSeconds <= this.timeoutWarningInSeconds) {
+    } else if (timeLeftInSeconds <= this.secondsToWarnBeforeTimeout) {
       this.showTimeoutWarningPrompt(timeLeftInSeconds);
     }
   }

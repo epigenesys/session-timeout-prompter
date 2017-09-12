@@ -104,6 +104,20 @@ var ServerPinger = (function () {
 })();
 'use strict';
 
+var sessionTimeoutPrompter = undefined;
+jQuery(function () {
+
+  var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
+
+  // If the container cannot be found then assume we don't need timeout prompting on this page.
+  if (timeoutPrompterContainer.length) {
+    var configData = timeoutPrompterContainer.data();
+    sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
+    sessionTimeoutPrompter.start();
+  }
+});
+'use strict';
+
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
@@ -113,7 +127,7 @@ var SessionTimeoutPrompter = (function () {
     _classCallCheck(this, SessionTimeoutPrompter);
 
     var serverPingPath = configData.serverPingPath;
-    var timeoutWarningInSeconds = configData.timeoutWarningInSeconds;
+    var secondsToWarnBeforeTimeout = configData.secondsToWarnBeforeTimeout;
     var sessionTimeoutInSeconds = configData.sessionTimeoutInSeconds;
     var sessionKey = configData.sessionKey;
 
@@ -123,7 +137,7 @@ var SessionTimeoutPrompter = (function () {
 
     var promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTimeContainer);
 
-    this.timeoutTimer = new TimeoutTimer(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer);
+    this.timeoutTimer = new TimeoutTimer(secondsToWarnBeforeTimeout, sessionTimeoutInSeconds, sessionKey, promptRenderer);
     this.serverPinger = new ServerPinger(serverPingPath);
     this.remainLoggedInButton = jQuery('#session-timeout-prompter-remain-logged-in-btn');
   }
@@ -167,20 +181,6 @@ var SessionTimeoutPrompter = (function () {
 
   return SessionTimeoutPrompter;
 })();
-'use strict';
-
-var sessionTimeoutPrompter = undefined;
-jQuery(function () {
-
-  var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
-
-  // If the container cannot be found then assume we don't need timeout prompting on this page.
-  if (timeoutPrompterContainer.length) {
-    var configData = timeoutPrompterContainer.data();
-    sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
-    sessionTimeoutPrompter.start();
-  }
-});
 "use strict";
 
 var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
@@ -189,18 +189,18 @@ function _classCallCheck(instance, Constructor) { if (!(instance instanceof Cons
 
 var TimeoutTimer = (function () {
 
-  // timeoutWarningInSeconds: Warning that their session is about to timeout
+  // secondsToWarnBeforeTimeout: Warning that their session is about to timeout
   //                          when there are this many minutes left.
   // sessionTimeoutInSeconds: Tell them their session has timed out when this
   //                          many minutes have elapsed.
   // sessionKey:              Unique key for this session - used in local storage
   //                          to make sure multiple browser tabs are synched.
 
-  function TimeoutTimer(timeoutWarningInSeconds, sessionTimeoutInSeconds, sessionKey, promptRenderer) {
+  function TimeoutTimer(secondsToWarnBeforeTimeout, sessionTimeoutInSeconds, sessionKey, promptRenderer) {
     _classCallCheck(this, TimeoutTimer);
 
     this.sessionTimeoutInSeconds = sessionTimeoutInSeconds;
-    this.timeoutWarningInSeconds = timeoutWarningInSeconds;
+    this.secondsToWarnBeforeTimeout = secondsToWarnBeforeTimeout;
     this.sessionKey = sessionKey;
     this.promptRenderer = promptRenderer;
     this.tickInterval = undefined;
@@ -248,7 +248,7 @@ var TimeoutTimer = (function () {
       var timeLeftInSeconds = this.timeoutAt - this.currentTimestamp();
       if (timeLeftInSeconds <= 0) {
         this.showTimedOutPrompt();
-      } else if (timeLeftInSeconds <= this.timeoutWarningInSeconds) {
+      } else if (timeLeftInSeconds <= this.secondsToWarnBeforeTimeout) {
         this.showTimeoutWarningPrompt(timeLeftInSeconds);
       }
     }

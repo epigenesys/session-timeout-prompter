@@ -2,6 +2,10 @@
 
 A Rails Engine to prompt the user when their session is about to timeout and allow them to extend it.
 
+## Dependencies
+
+This only works with Bootstrap 3 at present, but we would be happy to receive a pull request for Bootstrap 4 compatibility.
+
 ## Installation
 
 Add the gem to your Gemfile:

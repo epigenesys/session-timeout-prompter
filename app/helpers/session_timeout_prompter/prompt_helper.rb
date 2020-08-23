@@ -17,7 +17,7 @@ module SessionTimeoutPrompter
             server_ping_path:   session_timeout_prompter.server_pings_path,
             session_timeout_in_seconds: session_timeout_in_seconds,
             seconds_to_warn_before_timeout: seconds_to_warn_before_timeout,
-            session_key:      "#{::Rails.application.class.parent_name.downcase}-#{scope}"
+            session_key:      "#{::Rails.application.class.module_parent_name.downcase}-#{scope}"
           }
         }
       )

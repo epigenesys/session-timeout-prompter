@@ -22,6 +22,7 @@ Gem::Specification.new do |spec|
 
   spec.add_dependency 'rails', '>= 5.0'
   spec.add_dependency 'railties', '>= 5.0'
+  spec.add_dependency 'webpacker', '>= 5.0'
 
   spec.add_development_dependency 'bundler', '~> 1.15'
   spec.add_development_dependency 'rake', '~> 10.0'
@@ -29,6 +30,7 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec-rails', '>= 4.0.0'
   spec.add_development_dependency 'rails', '>= 6.0'
   spec.add_development_dependency 'sassc-rails', '>= 2.1.0'
+  spec.add_development_dependency 'webpacker', '>= 5.2'
   spec.add_development_dependency 'capybara', '>= 3.33.0'
   spec.add_development_dependency 'poltergeist'
   spec.add_development_dependency 'launchy'

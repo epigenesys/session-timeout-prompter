@@ -18,3 +18,4 @@
 .byebug_history
 
 /node_modules/
+/spec/dummy/node_modules/

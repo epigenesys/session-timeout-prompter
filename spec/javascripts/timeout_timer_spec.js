@@ -115,6 +115,11 @@ describe("TimeoutTimer", function() {
   }); // End describe Timeout Warning
 
   describe("localStorageUpdated", function(){
+    beforeEach(function() {
+      timeoutTimer = new TimeoutTimer(0, 30, sessionKey, promptRenderer);
+      timeoutTimer.start();
+    });
+
     describe("when the given key does not match the session key", function(){
       it("does not update timeoutAt", function(){
         timeoutTimer.sessionKey = 'rightKey';

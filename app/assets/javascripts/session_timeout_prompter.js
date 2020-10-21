@@ -4,125 +4,6 @@ var _createClass = (function () { function defineProperties(target, props) { for
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
 
-var Bootstrap3PromptRenderer = (function () {
-
-  // timeoutWarningModal:    the jquery object for the Bootstrap3 modal to display
-  //                         when the session is about to time out
-  // timedOutModal:          the jquery object for the Bootstrap3 modal to display
-  //                         when the session has timed out
-  // remainingTextContainer: the jquery object for the display of the time remaining
-
-  function Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer) {
-    _classCallCheck(this, Bootstrap3PromptRenderer);
-
-    this.timeoutWarningModal = timeoutWarningModal;
-    this.timedOutModal = timedOutModal;
-    this.remainingTextContainer = remainingTextContainer;
-    this.currentlyShowingWarningPrompt = false;
-  }
-
-  _createClass(Bootstrap3PromptRenderer, [{
-    key: 'renderTimedOut',
-    value: function renderTimedOut() {
-      this.timeoutWarningModal.modal('hide');
-      this.timedOutModal.modal('show');
-    }
-  }, {
-    key: 'renderTimeoutWarning',
-    value: function renderTimeoutWarning(timeLeftInSeconds) {
-      this.updateRemainingTimeText(timeLeftInSeconds);
-      if (!this.currentlyShowingWarningPrompt) {
-        this.currentlyShowingWarningPrompt = true;
-        this.timeoutWarningModal.modal('show');
-      }
-    }
-  }, {
-    key: 'hideAll',
-    value: function hideAll() {
-      this.timeoutWarningModal.modal('hide');
-      this.timedOutModal.modal('hide');
-      this.currentlyShowingWarningPrompt = false;
-    }
-  }, {
-    key: 'updateRemainingTimeText',
-    value: function updateRemainingTimeText(timeLeftInSeconds) {
-      var wholeMinutesRemaining = Math.floor(timeLeftInSeconds / 60);
-      var additionalSecondsRemaining = Math.floor(timeLeftInSeconds - wholeMinutesRemaining * 60);
-      this.remainingTextContainer.text(wholeMinutesRemaining + 'm ' + additionalSecondsRemaining + 's');
-    }
-  }]);
-
-  return Bootstrap3PromptRenderer;
-})();
-"use strict";
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var ServerPinger = (function () {
-  function ServerPinger(serverPingPath) {
-    _classCallCheck(this, ServerPinger);
-
-    this.serverPingPath = serverPingPath;
-    this.lastPingedAt = undefined;
-  }
-
-  _createClass(ServerPinger, [{
-    key: "pingServerNow",
-    value: function pingServerNow() {
-      var _this = this;
-
-      var callback = function callback() {
-        _this.setLastPingedAt();
-      };
-      jQuery.post(this.serverPingPath, callback);
-    }
-  }, {
-    key: "pingServerWithThrottling",
-    value: function pingServerWithThrottling() {
-      var seconds_to_throttle = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
-
-      if (!this.lastPingedAt || this.currentTimestamp() - this.lastPingedAt > seconds_to_throttle) {
-        this.pingServerNow();
-      }
-    }
-
-    // Private
-  }, {
-    key: "setLastPingedAt",
-    value: function setLastPingedAt() {
-      this.lastPingedAt = this.currentTimestamp();
-    }
-  }, {
-    key: "currentTimestamp",
-    value: function currentTimestamp() {
-      return Math.floor(new Date().getTime() / 1000);
-    }
-  }]);
-
-  return ServerPinger;
-})();
-'use strict';
-
-var sessionTimeoutPrompter = undefined;
-jQuery(function () {
-
-  var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
-
-  // If the container cannot be found then assume we don't need timeout prompting on this page.
-  if (timeoutPrompterContainer.length) {
-    var configData = timeoutPrompterContainer.data();
-    sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
-    sessionTimeoutPrompter.start();
-  }
-});
-'use strict';
-
-var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
-
 var SessionTimeoutPrompter = (function () {
   function SessionTimeoutPrompter(configData) {
     _classCallCheck(this, SessionTimeoutPrompter);
@@ -181,6 +62,55 @@ var SessionTimeoutPrompter = (function () {
   }]);
 
   return SessionTimeoutPrompter;
+})();
+"use strict";
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var ServerPinger = (function () {
+  function ServerPinger(serverPingPath) {
+    _classCallCheck(this, ServerPinger);
+
+    this.serverPingPath = serverPingPath;
+    this.lastPingedAt = undefined;
+  }
+
+  _createClass(ServerPinger, [{
+    key: "pingServerNow",
+    value: function pingServerNow() {
+      var _this = this;
+
+      var callback = function callback() {
+        _this.setLastPingedAt();
+      };
+      jQuery.post(this.serverPingPath, callback);
+    }
+  }, {
+    key: "pingServerWithThrottling",
+    value: function pingServerWithThrottling() {
+      var seconds_to_throttle = arguments.length <= 0 || arguments[0] === undefined ? 10 : arguments[0];
+
+      if (!this.lastPingedAt || this.currentTimestamp() - this.lastPingedAt > seconds_to_throttle) {
+        this.pingServerNow();
+      }
+    }
+
+    // Private
+  }, {
+    key: "setLastPingedAt",
+    value: function setLastPingedAt() {
+      this.lastPingedAt = this.currentTimestamp();
+    }
+  }, {
+    key: "currentTimestamp",
+    value: function currentTimestamp() {
+      return Math.floor(new Date().getTime() / 1000);
+    }
+  }]);
+
+  return ServerPinger;
 })();
 "use strict";
 
@@ -281,4 +211,74 @@ var TimeoutTimer = (function () {
   }]);
 
   return TimeoutTimer;
+})();
+'use strict';
+
+var sessionTimeoutPrompter = undefined;
+jQuery(function () {
+
+  var timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
+
+  // If the container cannot be found then assume we don't need timeout prompting on this page.
+  if (timeoutPrompterContainer.length) {
+    var configData = timeoutPrompterContainer.data();
+    sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
+    sessionTimeoutPrompter.start();
+  }
+});
+'use strict';
+
+var _createClass = (function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ('value' in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; })();
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError('Cannot call a class as a function'); } }
+
+var Bootstrap3PromptRenderer = (function () {
+
+  // timeoutWarningModal:    the jquery object for the Bootstrap3 modal to display
+  //                         when the session is about to time out
+  // timedOutModal:          the jquery object for the Bootstrap3 modal to display
+  //                         when the session has timed out
+  // remainingTextContainer: the jquery object for the display of the time remaining
+
+  function Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer) {
+    _classCallCheck(this, Bootstrap3PromptRenderer);
+
+    this.timeoutWarningModal = timeoutWarningModal;
+    this.timedOutModal = timedOutModal;
+    this.remainingTextContainer = remainingTextContainer;
+    this.currentlyShowingWarningPrompt = false;
+  }
+
+  _createClass(Bootstrap3PromptRenderer, [{
+    key: 'renderTimedOut',
+    value: function renderTimedOut() {
+      this.timeoutWarningModal.modal('hide');
+      this.timedOutModal.modal('show');
+    }
+  }, {
+    key: 'renderTimeoutWarning',
+    value: function renderTimeoutWarning(timeLeftInSeconds) {
+      this.updateRemainingTimeText(timeLeftInSeconds);
+      if (!this.currentlyShowingWarningPrompt) {
+        this.currentlyShowingWarningPrompt = true;
+        this.timeoutWarningModal.modal('show');
+      }
+    }
+  }, {
+    key: 'hideAll',
+    value: function hideAll() {
+      this.timeoutWarningModal.modal('hide');
+      this.timedOutModal.modal('hide');
+      this.currentlyShowingWarningPrompt = false;
+    }
+  }, {
+    key: 'updateRemainingTimeText',
+    value: function updateRemainingTimeText(timeLeftInSeconds) {
+      var wholeMinutesRemaining = Math.floor(timeLeftInSeconds / 60);
+      var additionalSecondsRemaining = Math.floor(timeLeftInSeconds - wholeMinutesRemaining * 60);
+      this.remainingTextContainer.text(wholeMinutesRemaining + 'm ' + additionalSecondsRemaining + 's');
+    }
+  }]);
+
+  return Bootstrap3PromptRenderer;
 })();

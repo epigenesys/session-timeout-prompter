@@ -1,6 +1,6 @@
 # Session Timeout Prompter
 
-A Rails 5 Engine to prompt the user when their session is about to timeout and allow them to extend it.
+A Rails 5+ Engine to prompt the user when their session is about to timeout and allow them to extend it.
 
 ## Dependencies
 
@@ -37,8 +37,6 @@ Require the css:
 ```
 *= require session_timeout_prompter
 ```
-
-**Note:** Currently depends on jQuery for ajax / event handling.
 
 ## Usage
 

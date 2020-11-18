@@ -1,8 +1,8 @@
-class Bootstrap3PromptRenderer {
+class Bootstrap4PromptRenderer {
 
-  // timeoutWarningModal:    the jquery object for the Bootstrap3 modal to display
+  // timeoutWarningModal:    the jquery object for the Bootstrap4 modal to display
   //                         when the session is about to time out
-  // timedOutModal:          the jquery object for the Bootstrap3 modal to display
+  // timedOutModal:          the jquery object for the Bootstrap4 modal to display
   //                         when the session has timed out
   // remainingTextContainer: the jquery object for the display of the time remaining
   constructor(timeoutWarningModal, timedOutModal, remainingTextContainer) {

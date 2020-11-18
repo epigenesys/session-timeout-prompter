@@ -10,7 +10,7 @@ class SessionTimeoutPrompter {
     const timedOutModal           = jQuery('#session-timeout-prompter-session-timed-out-modal');
     const remainingTimeContainer  = jQuery('#session-timeout-prompter-warning-timeout-in');
 
-    const promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTimeContainer);
+    const promptRenderer = new Bootstrap4PromptRenderer(timeoutWarningModal, timedOutModal, remainingTimeContainer);
 
     this.timeoutTimer = new TimeoutTimer(secondsToWarnBeforeTimeout, sessionTimeoutInSeconds, sessionKey, promptRenderer);
     this.serverPinger = new ServerPinger(serverPingPath);
@@ -42,9 +42,9 @@ class SessionTimeoutPrompter {
 
     // Listen to the storage event fired in TimeoutTimer to synchronise browser tabs
     // if a user extends their session in one tab but has another open for example.
-    jQuery(window).on('storage', e => {
+    window.onstorage = e => {
       const event = e.originalEvent;
       this.timeoutTimer.localStorageUpdated(event.key, event.newValue);
-    });
+    };
   }
 }

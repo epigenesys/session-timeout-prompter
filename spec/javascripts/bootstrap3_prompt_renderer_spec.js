@@ -1,4 +1,4 @@
-describe("Bootstrap3PromptRenderer", function() {
+describe("Bootstrap4PromptRenderer", function() {
 
   var promptRenderer;
   var timeoutWarningModal;
@@ -9,7 +9,7 @@ describe("Bootstrap3PromptRenderer", function() {
     timeoutWarningModal    = { modal: function(action) { } }
     timedOutModal          = { modal: function(action) { } }
     remainingTextContainer = jQuery('<div>');
-    promptRenderer = new Bootstrap3PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer);
+    promptRenderer = new Bootstrap4PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer);
   });
 
   describe("renderTimedOut", function() {

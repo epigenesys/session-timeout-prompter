@@ -47,5 +47,4 @@ class SessionTimeoutPrompter {
       this.timeoutTimer.localStorageUpdated(event.key, event.newValue);
     });
   }
-
 }

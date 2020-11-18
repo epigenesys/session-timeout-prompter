@@ -32,16 +32,14 @@ if options[:help]
   puts option_parser.help()
 else
 
-  es6_files_to_transpile = Dir.glob("#{SRC_DIRECTORY}/**/*.es6")
+  js_files_to_transpile = Dir.glob("#{SRC_DIRECTORY}/**/*.js")
 
   File.open TARGET_JS_PATH, 'w' do |output_file|
-
-    es6_files_to_transpile.each do |es6_file_path|
-      puts "Transpiling #{es6_file_path}..."
-      transpiled_es6 = Babel::Transpiler.transform File.read(es6_file_path)
-      output_file.puts transpiled_es6['code']
+    js_files_to_transpile.each do |js_file_path|
+      puts "Transpiling #{js_file_path}..."
+      transpiled_js = Babel::Transpiler.transform File.read(js_file_path)
+      output_file.puts transpiled_js['code']
     end
-
   end
 
   app = Rake.application

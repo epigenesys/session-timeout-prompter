@@ -1,9 +1,10 @@
 {
-  "name": "session-timeout-prompter",
-  "version": "1.0.0",
+  "name": "@epigenesys/session-timeout-prompter",
+  "version": "2.0.0",
   "description": "A Rails 5+ Engine to prompt the user when their session is about to timeout and allow them to extend it.",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "babel src --out-dir dist",
+    "test": "jest"
   },
   "repository": {
     "type": "git",
@@ -14,5 +15,7 @@
   },
   "devDependencies": {
     "@babel/preset-env": "^7.12.1"
-  }
+  },
+  "author": "epiGenesys (https://www.epigenesys.org.uk/)",
+  "license": "ISC"
 }

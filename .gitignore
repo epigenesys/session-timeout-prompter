@@ -17,9 +17,10 @@
 
 .byebug_history
 
-/node_modules/
+/npm/node_modules/
 /spec/dummy/node_modules/
 spec/dummy/public/packs-test/js/
 spec/dummy/public/packs-test/manifest.json
 spec/dummy/vendor/webdrivers/chromedriver
 spec/dummy/vendor/webdrivers/chromedriver.version
+npm/yarn-error.log

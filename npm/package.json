@@ -2,8 +2,11 @@
   "name": "@epigenesys/session-timeout-prompter",
   "version": "2.0.0",
   "description": "A Rails 5+ Engine to prompt the user when their session is about to timeout and allow them to extend it.",
+  "author": "epiGenesys (https://www.epigenesys.org.uk/)",
+  "license": "ISC",
+  "main": "./dist/index.js",
   "scripts": {
-    "build": "babel src --out-dir dist",
+    "build": "babel src --out-file dist/index.js",
     "test": "jest"
   },
   "repository": {
@@ -14,8 +17,31 @@
     "url": "https://github.com/epigenesys/session-timeout-prompter/issues"
   },
   "devDependencies": {
-    "@babel/preset-env": "^7.12.1"
+    "@babel/cli": "^7.12.1",
+    "@babel/core": "^7.12.3",
+    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
+    "@babel/preset-env": "^7.12.1",
+    "@webpack-cli/init": "^1.0.3",
+    "babel-jest": "^26.6.3",
+    "jest": "^26.6.3",
+    "jquery": "^3.5.1",
+    "webpack": "^5.6.0",
+    "webpack-cli": "^4.2.0"
   },
-  "author": "epiGenesys (https://www.epigenesys.org.uk/)",
-  "license": "ISC"
+  "jest": {
+    "transform": {
+      "^.+\\.(js|jsx)$": "babel-jest"
+    },
+    "setupFiles": [
+      "<rootDir>/tests/setup.js"
+    ],
+    "clearMocks": true,
+    "moduleDirectories": [
+      "src",
+      "node_modules"
+    ],
+    "testMatch": [
+      "**/tests/**/*.test.js"
+    ]
+  }
 }

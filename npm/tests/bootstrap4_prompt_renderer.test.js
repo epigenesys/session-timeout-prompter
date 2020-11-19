@@ -1,35 +1,27 @@
-describe("Bootstrap4PromptRenderer", function() {
+import Bootstrap4PromptRenderer from '../src/bootstrap4_prompt_renderer';
 
-  var promptRenderer;
-  var timeoutWarningModal;
-  var timedOutModal;
-  var remainingTextContainer;
+describe("Bootstrap4PromptRenderer", function() {
+  let promptRenderer;
+  let timeoutWarningModalMock;
+  let timedOutModalMock;
+  let remainingTextContainer;
 
   beforeEach(function() {
-    timeoutWarningModal    = { modal: function(action) { } }
-    timedOutModal          = { modal: function(action) { } }
+    timeoutWarningModalMock    = { modal: jest.fn() }
+    timedOutModalMock          = { modal: jest.fn() }
     remainingTextContainer = jQuery('<div>');
-    promptRenderer = new Bootstrap4PromptRenderer(timeoutWarningModal, timedOutModal, remainingTextContainer);
+    promptRenderer = new Bootstrap4PromptRenderer(timeoutWarningModalMock, timedOutModalMock, remainingTextContainer);
   });
 
   describe("renderTimedOut", function() {
     it("renders the timed out prompt making sure to hide the warning if present", function() {
-      timeoutWarningSpy = spyOn(timeoutWarningModal, 'modal');
-      timedOutSpy       = spyOn(timedOutModal, 'modal');
       promptRenderer.renderTimedOut();
-      expect(timeoutWarningSpy).toHaveBeenCalledWith('hide');
-      expect(timedOutSpy).toHaveBeenCalledWith('show');
+      expect(timeoutWarningModalMock.modal).toHaveBeenCalledWith('hide');
+      expect(timedOutModalMock.modal).toHaveBeenCalledWith('show');
     });
   });
 
   describe("renderTimeoutWarning", function() {
-    var timeoutWarningSpy;
-
-    beforeEach(function() {
-      timeoutWarningSpy = spyOn(timeoutWarningModal, 'modal');
-    });
-
-
     describe("when the number of seconds remaining is 63", function() {
       it("updates the remaining time text with 1m 3s", function() {
         promptRenderer.renderTimeoutWarning(63);
@@ -46,18 +38,15 @@ describe("Bootstrap4PromptRenderer", function() {
 
     it("renders the timeout warning prompt", function() {
       promptRenderer.renderTimeoutWarning();
-      expect(timeoutWarningSpy).toHaveBeenCalledWith('show');
+      expect(timeoutWarningModalMock.modal).toHaveBeenCalledWith('show');
     });
   });
 
   describe("hideAll", function() {
     it("renders the timed out prompt making sure to hide the warning if present", function() {
-      timeoutWarningSpy = spyOn(timeoutWarningModal, 'modal');
-      timedOutSpy       = spyOn(timedOutModal, 'modal');
       promptRenderer.hideAll();
-      expect(timeoutWarningSpy).toHaveBeenCalledWith('hide');
-      expect(timedOutSpy).toHaveBeenCalledWith('hide');
+      expect(timeoutWarningModalMock.modal).toHaveBeenCalledWith('hide');
+      expect(timedOutModalMock.modal).toHaveBeenCalledWith('hide');
     });
   });
-
 });

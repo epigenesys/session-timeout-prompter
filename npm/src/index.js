@@ -1,6 +1,6 @@
 let sessionTimeoutPrompter = undefined;
-jQuery(() => {
 
+jQuery(() => {
   const timeoutPrompterContainer = jQuery('#session-timeout-prompter-container');
 
   // If the container cannot be found then assume we don't need timeout prompting on this page.
@@ -9,5 +9,4 @@ jQuery(() => {
     sessionTimeoutPrompter = new SessionTimeoutPrompter(configData);
     sessionTimeoutPrompter.start();
   }
-
 });

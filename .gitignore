@@ -18,6 +18,7 @@
 .byebug_history
 
 /npm/node_modules/
+/npm/dist/
 /spec/dummy/node_modules/
 spec/dummy/public/packs-test/js/
 spec/dummy/public/packs-test/manifest.json

@@ -1,20 +1,18 @@
-describe("TimeoutTimer", function() {
+import TimeoutTimer from '../src/timeout_timer';
 
-  var promptRenderer;
-  var timeoutTimer;
-  var sessionKey;
+import { advanceTime } from './helpers/time';
+
+describe("TimeoutTimer", function() {
+  const baseTime = 1605781640000;
+  let promptRenderer;
+  let timeoutTimer;
+  let sessionKey;
 
   beforeEach(function() {
-    jasmine.clock().install();
-    jasmine.clock().mockDate();
-    promptRenderer = { renderTimedOut: 'foo', renderTimeoutWarning: 'bar', hideAll: function(){} };
+    jest.useFakeTimers();
+    promptRenderer = { renderTimedOut: jest.fn(), renderTimeoutWarning: jest.fn(), hideAll: function(){} };
     sessionKey     = 'rightKey'
-    spyOn(promptRenderer, 'renderTimedOut');
-    spyOn(promptRenderer, 'renderTimeoutWarning');
-  });
-
-  afterEach(function() {
-    jasmine.clock().uninstall();
+    Date.now = jest.fn(() => baseTime);
   });
 
   describe("Timeout Warning", function(){
@@ -25,15 +23,17 @@ describe("TimeoutTimer", function() {
       });
 
       describe("when 14 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 14001));
+
         it("will not trigger the timeout warning", function() {
-          jasmine.clock().tick(14001);
           expect(promptRenderer.renderTimeoutWarning).not.toHaveBeenCalled();
         });
       });
 
       describe("when 15 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 15001));
+
         it("will trigger the timeout warning with 5 seconds remaining", function() {
-          jasmine.clock().tick(15001);
           expect(promptRenderer.renderTimeoutWarning).toHaveBeenCalledWith(5);
         });
       });
@@ -46,21 +46,23 @@ describe("TimeoutTimer", function() {
       });
 
       describe("when 19 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 19001));
+
         it("will not trigger the timeout warning", function() {
-          jasmine.clock().tick(19001);
           expect(promptRenderer.renderTimeoutWarning).not.toHaveBeenCalled();
         });
       });
 
       describe("when 20 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 20001));
+
         it("will trigger the timeout warning with 10 seconds remaining", function() {
-          jasmine.clock().tick(20001);
+          jest.advanceTimersByTime(20001);
           expect(promptRenderer.renderTimeoutWarning).toHaveBeenCalledWith(10);
         });
       });
     });
   }); // End describe Timeout Warning
-
 
 
   describe("Timed Out", function(){
@@ -71,22 +73,27 @@ describe("TimeoutTimer", function() {
       });
 
       describe("when 19 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 19001));
+
         it("will not trigger the timed out prompt", function() {
-          jasmine.clock().tick(19001);
+          jest.advanceTimersByTime(19001);
           expect(promptRenderer.renderTimedOut).not.toHaveBeenCalled();
         });
       });
 
       describe("when 20 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 20001));
+
         it("will trigger the timed out prompt", function() {
-          jasmine.clock().tick(20001);
+          jest.advanceTimersByTime(20001);
           expect(promptRenderer.renderTimedOut).toHaveBeenCalled();
         });
       });
 
       describe("when 22 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 22001));
+
         it("will have only triggered a single prompt", function() {
-          jasmine.clock().tick(20001);
           expect(promptRenderer.renderTimedOut).toHaveBeenCalledTimes(1);
         });
       });
@@ -99,15 +106,17 @@ describe("TimeoutTimer", function() {
       });
 
       describe("when 29 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 29001));
+
         it("will not trigger the timed out prompt", function() {
-          jasmine.clock().tick(29001);
           expect(promptRenderer.renderTimedOut).not.toHaveBeenCalled();
         });
       });
 
       describe("when 30 seconds have passed", function() {
+        beforeEach(() => advanceTime(baseTime, 30001));
+
         it("will trigger the timed out prompt", function() {
-          jasmine.clock().tick(30001);
           expect(promptRenderer.renderTimedOut).toHaveBeenCalled();
         });
       });

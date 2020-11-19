@@ -1,3 +1,7 @@
+import Bootstrap4PromptRenderer from './bootstrap4_prompt_renderer';
+import TimeoutTimer from './timeout_timer';
+import ServerPinger from './server_pinger';
+
 class SessionTimeoutPrompter {
 
   constructor(configData) {
@@ -21,7 +25,6 @@ class SessionTimeoutPrompter {
     this.bindDefaultEvents();
     this.timeoutTimer.start();
   }
-
 
   // Private
 
@@ -48,3 +51,5 @@ class SessionTimeoutPrompter {
     };
   }
 }
+
+export default SessionTimeoutPrompter;

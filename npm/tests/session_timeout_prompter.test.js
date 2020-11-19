@@ -1,9 +1,10 @@
-describe("SessionTimeoutPrompter", function() {
+import SessionTimeoutPrompter from '../src/session_timeout_prompter';
 
-  var sessionTimeoutPrompter;
+describe("SessionTimeoutPrompter", function() {
+  let sessionTimeoutPrompter;
 
   beforeEach(function() {
-    var configData =  {
+    const configData =  {
       serverPingPath:          '/ping-it',
       secondsToWarnBeforeTimeout: 300,
       sessionTimeoutInSeconds: 1000,
@@ -18,7 +19,7 @@ describe("SessionTimeoutPrompter", function() {
     });
 
     it("sets up the TimeoutTimer with the correct timeout values and session key", function() {
-      var timeoutTimer = sessionTimeoutPrompter.timeoutTimer;
+      const timeoutTimer = sessionTimeoutPrompter.timeoutTimer;
       expect(timeoutTimer.secondsToWarnBeforeTimeout).toEqual(300);
       expect(timeoutTimer.sessionTimeoutInSeconds).toEqual(1000);
       expect(timeoutTimer.sessionKey).toEqual('some-session-key');
@@ -26,17 +27,15 @@ describe("SessionTimeoutPrompter", function() {
   });
 
   describe("start", function(){
-
     it("binds default events and starts the timer", function(){
-      var bindEventsSpy = spyOn(sessionTimeoutPrompter, 'bindDefaultEvents');
-      var startTimerSpy = spyOn(sessionTimeoutPrompter.timeoutTimer, 'start');
+      sessionTimeoutPrompter.bindDefaultEvents = jest.fn();
+      sessionTimeoutPrompter.timeoutTimer.start = jest.fn();
 
       sessionTimeoutPrompter.start();
 
-      expect(bindEventsSpy).toHaveBeenCalled();
-      expect(startTimerSpy).toHaveBeenCalled();
+      expect(sessionTimeoutPrompter.bindDefaultEvents).toHaveBeenCalled();
+      expect(sessionTimeoutPrompter.timeoutTimer.start).toHaveBeenCalled();
     });
 
   });
-
 });

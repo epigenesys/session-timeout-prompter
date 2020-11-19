@@ -22,6 +22,7 @@ feature "Timed Out", js: true do
       before { sleep 6 }
 
       scenario "I see the prompt" do
+        debugger
         expect(page).to have_content timed_out_text
       end
 

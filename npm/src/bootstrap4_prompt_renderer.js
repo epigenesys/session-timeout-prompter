@@ -36,5 +36,6 @@ class Bootstrap4PromptRenderer {
     const additionalSecondsRemaining = Math.floor(timeLeftInSeconds - (wholeMinutesRemaining * 60));
     this.remainingTextContainer.text(`${wholeMinutesRemaining}m ${additionalSecondsRemaining}s`);
   }
-
 }
+
+export default Bootstrap4PromptRenderer;

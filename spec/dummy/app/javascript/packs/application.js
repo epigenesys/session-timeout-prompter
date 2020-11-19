@@ -5,10 +5,12 @@
 
 require("@rails/ujs").start()
 
-import 'bootstrap';
-import "styles/main";
-
 var jQuery = require('jquery')
 
 global.$ = global.jQuery = jQuery;
 window.$ = window.jQuery = jQuery;
+
+import 'bootstrap';
+import "styles/main";
+
+import "@epigenesys/session-timeout-prompter/dist"

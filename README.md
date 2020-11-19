@@ -116,6 +116,10 @@ The Javascript is written in ES6 and transpiled with Babel. The ES6 should be mo
 
 There is a handy script `./build` that will do the transpilation and run the tests. Run with --help for options.
 
+### Linking the package
+
+
+
 ### Testing
 
 Uses RSpec and Jasmine for automated testing. To run the Jasmine tests for the Javascript run `rake jasmine` and go to `localhost:8888` in your browser. The suite will run every time the page is reloaded.

@@ -6,7 +6,7 @@
   "license": "ISC",
   "main": "./dist/index.js",
   "scripts": {
-    "build": "babel src --out-file dist/index.js",
+    "build": "webpack",
     "test": "jest"
   },
   "repository": {
@@ -16,15 +16,15 @@
   "bugs": {
     "url": "https://github.com/epigenesys/session-timeout-prompter/issues"
   },
+  "peerDependencies": {
+    "jquery": "^3.5.1"
+  },
   "devDependencies": {
-    "@babel/cli": "^7.12.1",
-    "@babel/core": "^7.12.3",
-    "@babel/plugin-transform-modules-commonjs": "^7.12.1",
     "@babel/preset-env": "^7.12.1",
     "@webpack-cli/init": "^1.0.3",
     "babel-jest": "^26.6.3",
+    "babel-loader": "^8.2.1",
     "jest": "^26.6.3",
-    "jquery": "^3.5.1",
     "webpack": "^5.6.0",
     "webpack-cli": "^4.2.0"
   },

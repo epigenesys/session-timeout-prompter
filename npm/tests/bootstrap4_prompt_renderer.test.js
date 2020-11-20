@@ -1,3 +1,5 @@
+import jQuery from 'jquery';
+
 import Bootstrap4PromptRenderer from '../src/bootstrap4_prompt_renderer';
 
 describe("Bootstrap4PromptRenderer", function() {

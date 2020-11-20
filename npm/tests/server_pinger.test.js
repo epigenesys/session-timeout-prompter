@@ -1,3 +1,5 @@
+import jQuery from 'jquery';
+
 import ServerPinger from '../src/server_pinger';
 
 describe("ServerPinger", function() {

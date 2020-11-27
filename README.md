@@ -116,7 +116,20 @@ The Javascript is written in ES6 and transpiled with Babel. The ES6 should be mo
 
 There is a handy script `./build` that will do the transpilation and run the tests. Run with --help for options.
 
-### Linking the package
+### Development setup
+
+First install the required node_modules in the `npm` folder.
+
+```
+cd npm
+yarn
+yarn link
+
+cd ..
+cd spec/dummy
+yarn
+yarn link @epigenesys/session-timeout-prompter
+```
 
 
 

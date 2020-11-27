@@ -6,6 +6,6 @@
 require("@rails/ujs").start()
 
 import 'bootstrap';
-import "@epigenesys/session-timeout-prompter/dist"
+import "@epigenesys/session-timeout-prompter"
 
 import "styles/main";

@@ -16,7 +16,7 @@
   "bugs": {
     "url": "https://github.com/epigenesys/session-timeout-prompter/issues"
   },
-  "peerDependencies": {
+  "dependencies": {
     "jquery": "^3.5.1"
   },
   "devDependencies": {

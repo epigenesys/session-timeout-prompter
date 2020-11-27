@@ -25,3 +25,4 @@ spec/dummy/public/packs-test/manifest.json
 spec/dummy/vendor/webdrivers/chromedriver
 spec/dummy/vendor/webdrivers/chromedriver.version
 npm/yarn-error.log
+spec/dummy/db/development.sqlite3

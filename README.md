@@ -124,14 +124,13 @@ First install the required node_modules in the `npm` folder.
 cd npm
 yarn
 yarn link
+yarn build
 
 cd ..
 cd spec/dummy
 yarn
 yarn link @epigenesys/session-timeout-prompter
 ```
-
-
 
 ### Testing
 

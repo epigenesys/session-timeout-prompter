@@ -6,8 +6,8 @@ require 'session_timeout_prompter/version'
 Gem::Specification.new do |spec|
   spec.name          = 'session_timeout_prompter'
   spec.version       = SessionTimeoutPrompter::VERSION
-  spec.authors       = ['Ant Nettleship', 'Ryan Bibby']
-  spec.email         = ['anthony.nettleship@epigenesys.org.uk', 'ryan.bibby@epigenesys.org.uk']
+  spec.authors       = ['Ant Nettleship', 'James Gregory-Monk', 'Ryan Bibby']
+  spec.email         = ['anthony.nettleship@epigenesys.org.uk', 'james.gregory@epigenesys.org.uk', 'ryan.bibby@epigenesys.org.uk']
 
   spec.summary       = 'A Rails Engine to prompt the user when their session is about to timeout and allow them to extend it.'
   spec.homepage      = 'https://github.com/epigenesys/session-timeout-prompter'
@@ -23,7 +23,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'rails', '>= 5.2.0', '< 6.1.0'
   spec.add_dependency 'railties', '>= 5.2.0'
 
-  spec.add_development_dependency 'bundler', '~> 1.15'
+  spec.add_development_dependency 'bundler', '>= 1.15'
   spec.add_development_dependency 'rake', '>= 12.3.3'
   spec.add_development_dependency 'rspec', '>= 3.0'
   spec.add_development_dependency 'rspec-rails', '>= 3.0'

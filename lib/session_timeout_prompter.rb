@@ -1,4 +1,5 @@
 require "session_timeout_prompter/version"
+require_relative '../app/helpers/session_timeout_prompter/prompt_helper'
 
 module SessionTimeoutPrompter
   class Engine < Rails::Engine
